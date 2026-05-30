@@ -1,0 +1,37 @@
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 320px;
+}
+
+.input-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #a53860;
+  font-family: 'Georgia', serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.input-field {
+  background: #fff8f5;
+  border: 1.5px solid #ffa5ab80;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #450920;
+  font-family: 'Georgia', serif;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-field::placeholder {
+  color: #da627d80;
+}
+
+.input-field:focus {
+  border-color: #da627d;
+  box-shadow: 0 0 0 3px rgba(218, 98, 125, 0.15);
+}

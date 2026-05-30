@@ -1,0 +1,81 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Georgia', serif;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+    box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* === Primary (filled, default) === */
+.btn-primary {
+  background: #da627d;
+  color: #fff8f5;
+  box-shadow: 0 2px 8px rgba(218, 98, 125, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #a53860;
+  box-shadow: 0 4px 14px rgba(165, 56, 96, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active:not(:disabled) {
+  background: #450920;
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* === Secondary (outlined) === */
+.btn-secondary {
+  background: transparent;
+  color: #a53860;
+  border: 1.5px solid #da627d;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #ffa5ab30;
+  color: #450920;
+  border-color: #a53860;
+}
+
+.btn-secondary:active:not(:disabled) {
+  background: #ffa5ab50;
+  border-color: #450920;
+}
+
+/* === Danger (ghost, muted) === */
+.btn-danger {
+  background: transparent;
+  color: #a53860aa;
+  padding: 10px 14px;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #ffa5ab30;
+  color: #450920;
+}
+
+.btn-danger:active:not(:disabled) {
+  background: #ffa5ab50;
+}

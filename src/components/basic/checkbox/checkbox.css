@@ -1,0 +1,92 @@
+.cb-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-family: 'Georgia', serif;
+  user-select: none;
+  padding: 4px 0;
+  transition: opacity 0.15s ease;
+}
+
+.cb-wrapper.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Hide native checkbox but keep it accessible */
+.cb-native {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Custom box */
+.cb-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid #ffa5ab;
+  border-radius: 6px;
+  background: #fff8f5;
+  flex-shrink: 0;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.1s ease,
+    box-shadow 0.18s ease;
+}
+
+.cb-wrapper:hover:not(.disabled) .cb-box {
+  border-color: #da627d;
+  background: #ffa5ab20;
+}
+
+/* Focus ring for keyboard users */
+.cb-native:focus-visible + .cb-box {
+  box-shadow: 0 0 0 3px rgba(218, 98, 125, 0.25);
+  border-color: #da627d;
+}
+
+/* Checked state */
+.cb-box.checked {
+  background: #da627d;
+  border-color: #da627d;
+  box-shadow: 0 2px 6px rgba(218, 98, 125, 0.3);
+}
+
+.cb-wrapper:hover:not(.disabled) .cb-box.checked {
+  background: #a53860;
+  border-color: #a53860;
+}
+
+/* Pressed/active feedback */
+.cb-wrapper:active:not(.disabled) .cb-box {
+  transform: scale(0.92);
+}
+
+/* Check icon */
+.cb-check-icon {
+  color: #fff8f5;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.15s ease, transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cb-box.checked .cb-check-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Label */
+.cb-label {
+  font-size: 14px;
+  color: #450920;
+  line-height: 1.4;
+  transition: color 0.15s ease;
+}
+
+.cb-wrapper:hover:not(.disabled) .cb-label {
+  color: #a53860;
+}

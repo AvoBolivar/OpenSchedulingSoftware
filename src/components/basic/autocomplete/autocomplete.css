@@ -1,0 +1,113 @@
+.autocomplete-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 320px;
+  position: relative;
+}
+
+.autocomplete-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #a53860;
+  font-family: 'Georgia', serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.autocomplete-input-wrapper {
+  position: relative;
+}
+
+.autocomplete-input {
+  width: 100%;
+  background: #fff8f5;
+  border: 1.5px solid #ffa5ab80;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #450920;
+  font-family: 'Georgia', serif;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.autocomplete-input::placeholder {
+  color: #da627d80;
+}
+
+.autocomplete-input:focus {
+  border-color: #da627d;
+  box-shadow: 0 0 0 3px rgba(218, 98, 125, 0.15);
+}
+
+.autocomplete-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 4px 0 0;
+  padding: 4px;
+  background: #fff8f5;
+  border: 1px solid #ffa5ab60;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(69, 9, 32, 0.12);
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+}
+
+.autocomplete-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.autocomplete-item {
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #450920;
+  font-family: 'Georgia', serif;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.1s ease, color 0.1s ease;
+}
+
+.autocomplete-item.highlighted {
+  background: #ffa5ab40;
+  color: #450920;
+}
+
+.autocomplete-item.selected {
+  background: #da627d;
+  color: #fff8f5;
+  font-weight: 600;
+}
+
+.autocomplete-item.selected.highlighted {
+  background: #a53860;
+}
+
+/* Custom scrollbar */
+.autocomplete-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.autocomplete-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.autocomplete-menu::-webkit-scrollbar-thumb {
+  background: #ffa5ab80;
+  border-radius: 3px;
+}
+
+.autocomplete-menu::-webkit-scrollbar-thumb:hover {
+  background: #da627d;
+}

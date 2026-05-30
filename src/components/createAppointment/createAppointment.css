@@ -1,0 +1,51 @@
+/* Container layout splitting Calendar and Form */
+.appointment-modal-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 8px 4px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Calendar section styling wrapper */
+.calendar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+}
+
+/* Form section grid for inputs */
+.form-section {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: center;
+}
+
+/* Field positioning classes */
+.form-group.full-width {
+  grid-column: span 2;
+}
+
+.form-group.half-width {
+  grid-column: span 1;
+}
+
+/* Action buttons area at the bottom of the form */
+.form-actions {
+  grid-column: span 2;
+  gap: 10px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+/* Responsive breakpoint: Side-by-side view on tablet/desktop */
+@media (min-width: 768px) {
+  .appointment-modal-layout {
+    grid-template-columns: 1.2fr 1fr; /* Calendar gets slightly more room */
+    align-items: start;
+  }
+}
