@@ -1,4 +1,4 @@
-import "./NavBar.css"
+import "./navbar.css"
 
 export type PageId = "appointments" | "finance" | "clients"
 
