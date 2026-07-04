@@ -2,8 +2,6 @@ import { exportData } from "../../../lib/exportData";
 import { importData } from "../../../lib/importData";
 
 
-import React from 'react'
-
 const ImportData = () => {
   return (
     <div>
