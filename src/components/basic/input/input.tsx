@@ -1,26 +1,41 @@
 import "./input.css"
 
 interface InputProps {
-  label: string,
-  placeholder: string,
+  label: string
+  placeholder: string
   type?: string
+  inputMode?: "text" | "decimal" | "numeric" | "tel" | "email" | "url" | "search"
   value: string
   onChange: (value: string) => void
+  onEnter?: () => void
 }
 
-export default function Input({label, placeholder, value, onChange, type}: InputProps) {
-  if (type) {
-    console.log("This is type:", type);
-  }
+export default function Input({
+  label,
+  placeholder,
+  value,
+  onChange,
+  type = "text",
+  inputMode,
+  onEnter,
+}: InputProps) {
   return (
-    <>
-    <p className="input-label">{label}</p>
-    <input 
-      className="input-field"
-      placeholder={placeholder}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-    />
-    </>
+    <div className="input-wrapper">
+      {label && <label className="input-label">{label}</label>}
+      <input
+        className="input-field"
+        type={type}
+        inputMode={inputMode}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && onEnter) {
+            e.preventDefault()
+            onEnter()
+          }
+        }}
+      />
+    </div>
   )
 }
