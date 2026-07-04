@@ -220,6 +220,7 @@
 /* === Footer === */
 .form-actions {
   display: flex;
+  flex-direction: column;
   padding-top: 12px;
   border-top: 1px solid #ffa5ab30;
   margin-top: 4px;

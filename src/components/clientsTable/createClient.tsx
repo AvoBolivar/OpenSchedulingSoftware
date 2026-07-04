@@ -86,6 +86,8 @@ export default function CreateClient() {
                 value={String(price)}
                 onChange={(v) => setPrice(Number(v) || 0)}
               />
+            </div>
+            <div className="form-fields form-fields-row">
               <Input
                 label="Employee Payment"
                 placeholder="0"
