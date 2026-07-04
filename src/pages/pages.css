@@ -3,7 +3,10 @@
 .page {
   max-width: 920px;
   margin: 0 auto;
-  padding: 28px 20px 56px;
+  /* mobile-first padding; safe-area for notched phones */
+  padding: 20px 16px calc(44px + env(safe-area-inset-bottom));
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
   font-family: Georgia, "Times New Roman", serif;
   color: #450920;
 }
@@ -15,9 +18,10 @@
 
 .page__title {
   margin: 0;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   color: #a53860;
+  line-height: 1.2;
 }
 
 .page__subtitle {
@@ -28,12 +32,12 @@
 
 /* Section block */
 .section {
-  margin-top: 28px;
+  margin-top: 24px;
 }
 
 .section__label {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
@@ -46,14 +50,17 @@
   background: #fff8f5;
   border: 1px solid rgba(255, 165, 171, 0.5);
   border-radius: 16px;
-  padding: 20px;
+  padding: 16px;
   box-shadow: 0 2px 14px rgba(69, 9, 32, 0.07);
+  /* prevent inner content (calendar, lists) from forcing horizontal scroll */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Dashed divider */
 .divider {
   height: 0;
-  margin: 20px 0;
+  margin: 18px 0;
   border: 0;
   border-top: 1.5px dashed rgba(218, 98, 125, 0.35);
 }
@@ -61,20 +68,47 @@
 /* Finance summary grid */
 .finance-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 14px;
 }
 
+/* Action buttons: stack on mobile, each a comfortable tap target */
 .button-section {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-@media (max-width: 560px) {
+.button-section > * {
+  width: 100%;
+}
+
+/* Give buttons a minimum touch height (44px is the accessible minimum) */
+.button-section button {
+  min-height: 48px;
+}
+
+/* Tablet and up */
+@media (min-width: 560px) {
   .page {
-    padding: 20px 14px 44px;
+    padding: 28px 20px 56px;
+  }
+  .page__title {
+    font-size: 24px;
+  }
+  .section {
+    margin-top: 28px;
+  }
+  .panel {
+    padding: 20px;
   }
   .finance-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  }
+  .button-section {
+    flex-direction: row;
+  }
+  .button-section > * {
+    width: auto;
   }
 }

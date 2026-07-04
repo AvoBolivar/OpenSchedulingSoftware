@@ -39,16 +39,13 @@ export default function AppointmentsPage() {
 
       <section className="section">
         <span className="section__label">Schedule</span>
-        <div className="panel">
           <ThemedCalendar
-            label="Calendar"
             value={new Date(selectedDay)}
             onChange={setSelectedDay}
             eventDates={eventDates}
           />
           <hr className="divider" />
           <CreateAppointment />
-        </div>
       </section>
 
       <section className="section">

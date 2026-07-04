@@ -3,18 +3,28 @@
   inset: 0;
   background: rgba(69, 9, 32, 0.4);
   display: flex;
-  align-items: center;
+  /* align to the bottom on mobile so the modal rises from the thumb zone */
+  align-items: flex-end;
   justify-content: center;
   z-index: 1000;
-  padding: 16px;
+  padding: 0;
+  /* clear the notch/home indicator */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .modal {
   background: #fff8f5;
   border: 1px solid #ffa5ab;
-  border-radius: 8px;
+  /* rounded top only — reads as a bottom sheet on mobile */
+  border-radius: 16px 16px 0 0;
   width: 100%;
   max-width: 480px;
+  /* never taller than the screen; body scrolls if content overflows */
+  max-height: 92vh;
+  max-height: 92dvh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -4px 24px rgba(69, 9, 32, 0.18);
 }
 
 .modal-header {
@@ -23,6 +33,8 @@
   justify-content: space-between;
   padding: 16px 20px;
   border-bottom: 1px solid #ffa5ab;
+  /* keep the header pinned while the body scrolls */
+  flex-shrink: 0;
 }
 
 .modal-title {
@@ -36,15 +48,49 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   color: #a53860;
-  padding: 4px 8px;
+  /* 44px tap target */
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  margin: -8px -8px -8px 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.modal-close:hover {
-  color: #450920;
+.modal-close:active {
+  background: #ffa5ab30;
+}
+
+@media (hover: hover) {
+  .modal-close:hover {
+    color: #450920;
+    background: #ffa5ab20;
+  }
 }
 
 .modal-body {
   padding: 20px;
+  /* scroll inside the modal when content is tall */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+}
+
+/* Tablet and up: centered card instead of bottom sheet */
+@media (min-width: 560px) {
+  .modal-overlay {
+    align-items: center;
+    padding: 16px;
+  }
+  .modal {
+    border-radius: 8px;
+    border: 1px solid #ffa5ab;
+    max-height: 88vh;
+    max-height: 88dvh;
+    box-shadow: 0 8px 32px rgba(69, 9, 32, 0.2);
+  }
 }

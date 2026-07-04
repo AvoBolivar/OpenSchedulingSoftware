@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 340px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
   font-family: 'Georgia', serif;
 }
 
@@ -21,16 +23,18 @@
   background: #fff8f5;
   border: 1.5px solid #ffa5ab60;
   border-radius: 14px;
-  padding: 16px;
+  padding: 14px;
   font-family: 'Georgia', serif;
   box-shadow: 0 4px 16px rgba(69, 9, 32, 0.08);
+  /* stop iOS from applying its own tap-highlight flash */
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Navigation bar (month/year + arrows) */
 .themed-calendar .react-calendar__navigation {
   display: flex;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   height: auto;
 }
 
@@ -44,6 +48,15 @@
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
   min-width: auto;
+}
+
+/* Arrow buttons get a proper thumb-sized tap target */
+.themed-calendar .react-calendar__navigation__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .themed-calendar .react-calendar__navigation button:enabled:hover,
@@ -63,26 +76,22 @@
   font-weight: 700;
   letter-spacing: 0.02em;
   flex-grow: 1;
-}
-
-.themed-calendar .react-calendar__navigation__arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /* keep the month label tappable-friendly too */
+  min-height: 44px;
 }
 
 /* Weekday header (S M T W T F S) */
 .themed-calendar .react-calendar__month-view__weekdays {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .themed-calendar .react-calendar__month-view__weekdays__weekday {
   text-align: center;
-  padding: 8px 0;
+  padding: 6px 0;
   font-size: 11px;
   font-weight: 700;
   color: #a53860;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
@@ -96,7 +105,7 @@
 .themed-calendar .react-calendar__tile {
   background: transparent;
   border: none;
-  padding: 10px 0;
+  padding: 6px 0;
   font-size: 14px;
   color: #450920;
   font-family: 'Georgia', serif;
@@ -111,11 +120,24 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.themed-calendar .react-calendar__tile:enabled:hover {
-  background: #ffa5ab40;
-  color: #450920;
+/* On touch devices, hover styles "stick" after a tap — only apply hover
+   where the device actually has a hovering pointer (a mouse) */
+@media (hover: hover) {
+  .themed-calendar .react-calendar__tile:enabled:hover {
+    background: #ffa5ab40;
+    color: #450920;
+  }
+  .themed-calendar .react-calendar__tile.cal-today:enabled:hover {
+    background: #ffa5ab60;
+  }
+}
+
+/* Give touch users clear feedback on press instead */
+.themed-calendar .react-calendar__tile:active {
+  background: #ffa5ab55;
 }
 
 /* Days outside the current month */
@@ -134,10 +156,6 @@
   color: #a53860;
   font-weight: 700;
   box-shadow: inset 0 0 0 1.5px #da627d;
-}
-
-.themed-calendar .react-calendar__tile.cal-today:enabled:hover {
-  background: #ffa5ab60;
 }
 
 /* Selected date */
@@ -183,4 +201,17 @@
 .themed-calendar button:focus-visible {
   outline: 2px solid #da627d80;
   outline-offset: 2px;
+}
+
+/* Desktop: cap the width so it doesn't sprawl */
+@media (min-width: 560px) {
+  .cal-wrapper {
+    max-width: 340px;
+  }
+  .themed-calendar {
+    padding: 16px;
+  }
+  .themed-calendar .react-calendar__tile {
+    padding: 10px 0;
+  }
 }
