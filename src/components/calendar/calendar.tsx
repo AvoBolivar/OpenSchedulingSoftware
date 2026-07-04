@@ -2,14 +2,12 @@ import Calendar from "react-calendar"
 import "./calendar.css"
 
 interface ThemedCalendarProps {
-  label?: string
   value: Date | null
   onChange: (date: Date) => void
   eventDates?: Date[]
 }
 
 export default function ThemedCalendar({
-  label,
   value,
   onChange,
   eventDates = [],
@@ -25,9 +23,6 @@ export default function ThemedCalendar({
     date.toDateString() === new Date().toDateString()
 
   return (
-    <div className="cal-wrapper">
-      {label && <label className="cal-label">{label}</label>}
-
       <Calendar
         value={value}
         onChange={(val) => {
@@ -37,12 +32,12 @@ export default function ThemedCalendar({
         prev2Label={null}
         next2Label={null}
         prevLabel={
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="m15 18-6-6 6-6" />
           </svg>
         }
         nextLabel={
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="m9 18 6-6-6-6" />
           </svg>
         }
@@ -62,6 +57,5 @@ export default function ThemedCalendar({
           return classes.join(" ")
         }}
       />
-    </div>
   )
 }

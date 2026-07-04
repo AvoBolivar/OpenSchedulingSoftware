@@ -145,8 +145,6 @@ function UpdateAppointmentForm({
             <div className="form-actions">
               <Button label="Update Appointment" onClick={() => updateAppointment()} />
               <Button label="Delete Appointment" onClick={deleteAppointment} />
-            </div>
-            <div>
               <Button label="Job Completed" onClick={() => setComponentDisplayed("Complete")} />
             </div>
           </div>

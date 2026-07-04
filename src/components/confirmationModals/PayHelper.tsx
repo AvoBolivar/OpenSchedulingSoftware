@@ -1,6 +1,7 @@
 import Modal from "../modal/modal";
 import Button from "../basic/button/button";
 import { usePaymentStore } from "../../stores/usePaymentStore";
+import { useAppointmentStore } from "../../stores/useAppointmentStore";
 import type { Payment } from "../../definitions/payments";
 import "./PayHelper.css";
 
@@ -26,10 +27,10 @@ export default function PayHelperModal({
   setIsModalOpen,
   payment,
 }: PayHelperModalProps) {
-  const getAmountOwed = usePaymentStore((s) => s.getTotalOwed);
   const payHelper = usePaymentStore((s) => s.payHelper);
+  const getAppmnt = useAppointmentStore((s) => s.getAppointment);
 
-  const owed = getAmountOwed();
+  const appmnt = getAppmnt(payment.appointmentID)
 
   function handlePayHelper() {
     payHelper(payment.appointmentID);
@@ -59,7 +60,7 @@ export default function PayHelperModal({
           <span className="payout-amount-label">Amount owed</span>
           <span className="payout-amount-value">
             <span className="cur">$</span>
-            {owed}
+            {appmnt? appmnt.expense : 0}
           </span>
         </div>
 

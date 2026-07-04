@@ -42,7 +42,6 @@ export default function AppointmentInfo({
     <div>
       <div className="calendar-section">
         <ThemedCalendar
-          label="Select Date"
           value={selectedDate}
           onChange={setSelectedDate}
           eventDates={eventDates}

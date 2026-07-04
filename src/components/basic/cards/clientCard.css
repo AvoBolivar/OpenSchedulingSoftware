@@ -1,22 +1,88 @@
-/* === Inactive state === */
+/* === Card container === */
+.client-card {
+  background: #fff8f5;
+  border: 1px solid #ffa5ab50;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(69, 9, 32, 0.06);
+  overflow: hidden;
+  font-family: 'Georgia', serif;
+}
+
 .client-card.is-inactive {
-  opacity: 0.7;
+  opacity: 0.72;
   background: #faf4f1;
 }
 
-.client-card.is-inactive .client-avatar {
-  background: linear-gradient(135deg, #b89098 0%, #806068 100%);
-  box-shadow: 0 2px 8px rgba(128, 96, 104, 0.25);
-}
-
-/* === Header meta (label + status pill) === */
-.client-name-meta {
+/* === Summary row (always visible, tappable) === */
+.client-summary {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  padding: 16px;
+  min-height: 60px;
+  font-family: 'Georgia', serif;
+  -webkit-tap-highlight-color: transparent;
 }
 
+.client-summary:active {
+  background: #ffa5ab12;
+}
+
+@media (hover: hover) {
+  .client-summary:hover {
+    background: #ffa5ab10;
+  }
+}
+
+.client-summary-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.client-name {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #450920;
+  line-height: 1.2;
+  /* keep long names from breaking the row */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.client-summary-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.client-summary-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #a53860;
+}
+
+.client-chevron {
+  color: #a53860;
+  transition: transform 0.2s ease;
+}
+
+.client-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* === Status pill === */
 .client-status {
   display: inline-flex;
   align-items: center;
@@ -29,6 +95,7 @@
   background: #80606815;
   padding: 2px 8px;
   border-radius: 999px;
+  width: fit-content;
 }
 
 .client-status.is-active {
@@ -41,8 +108,65 @@
   height: 6px;
   border-radius: 50%;
   background: currentColor;
-  box-shadow: 0 0 0 2px currentColor;
   opacity: 0.85;
+}
+
+/* === Expanded detail panel === */
+.client-detail-panel {
+  padding: 0 16px 16px;
+  border-top: 1px solid #ffa5ab30;
+  animation: clientExpand 0.18s ease;
+}
+
+@keyframes clientExpand {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .client-detail-panel { animation: none; }
+  .client-chevron { transition: none; }
+}
+
+.client-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 14px;
+}
+
+/* fixed: was `gap: 5em,` (comma + huge value) */
+.client-detail-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.client-detail-icon {
+  color: #da627d;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.client-detail-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.client-detail-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #a53860;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.client-detail-value {
+  font-size: 14px;
+  color: #450920;
+  word-break: break-word;
 }
 
 /* === Financial summary === */
@@ -76,8 +200,6 @@
   font-size: 16px;
   font-weight: 700;
   color: #450920;
-  font-family: 'Georgia', serif;
-  letter-spacing: 0.01em;
 }
 
 .client-finance-divider {
@@ -90,11 +212,6 @@
     transparent 100%
   );
   margin: 0 14px;
-}
-
-.client-detail-row {
-  display: flex;
-  gap: 5em,
 }
 
 /* === Notes === */
@@ -134,7 +251,6 @@
   border-radius: 999px;
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0;
 }
 
 .client-notes-list {
@@ -147,8 +263,7 @@
 }
 
 .client-notes-item {
-  position: relative;
-  font-size: 12.5px;
+  font-size: 13px;
   color: #450920;
   line-height: 1.45;
   background: #ffa5ab18;
@@ -156,4 +271,15 @@
   border-radius: 0 6px 6px 0;
   padding: 6px 10px 6px 12px;
   word-break: break-word;
+}
+
+/* === Actions === */
+.client-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.client-actions > * {
+  flex: 1;
 }
