@@ -9,26 +9,26 @@ interface ClientCardProps {
 
 export default function ClientCard({ client }: ClientCardProps) {
 
-  // Get initials for avatar
-  const initials = client.name
-    .split(" ")
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase()
+  const formatCurrency = (n: number) =>
+    new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    }).format(n)
 
   return (
-    <div className="client-card">
+    <div className={`client-card ${!client.active ? "is-inactive" : ""}`}>
       {/* Header with avatar and actions */}
       <div className="client-card-header">
-        <div className="client-avatar">{initials}</div>
         <div className="client-name-wrapper">
           <h3 className="client-name">{client.name}</h3>
-          <span className="client-label">Client</span>
-        </div>
-        <div className="client-actions">
-          <UpdateClient client={client}/>
-          <DeleteClient clientID={client.id}/>
+          <div className="client-name-meta">
+            <span className="client-label">Client</span>
+            <span className={`client-status ${client.active ? "is-active" : ""}`}>
+              <span className="client-status-dot" />
+              {client.active ? "Active" : "Inactive"}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -45,8 +45,8 @@ export default function ClientCard({ client }: ClientCardProps) {
             </svg>
           </div>
           <div className="client-detail-text">
-            <span className="client-detail-label">Address</span>
-            <span className="client-detail-value">{client.address}</span>
+            <span className="client-detail-label">Address: </span>
+            <span className="client-detail-value">{client.address || "—"}</span>
           </div>
         </div>
 
@@ -57,11 +57,49 @@ export default function ClientCard({ client }: ClientCardProps) {
             </svg>
           </div>
           <div className="client-detail-text">
-            <span className="client-detail-label">Phone</span>
-            
-              {client.phoneNumber}
+            <span className="client-detail-label">Phone: </span>
+            <span className="client-detail-value">{client.phoneNumber || "—"}</span>
           </div>
         </div>
+      </div>
+
+      {/* Financial summary */}
+      <div className="client-finance">
+        <div className="client-finance-item">
+          <span className="client-finance-label">Price</span>
+          <span className="client-finance-value">{formatCurrency(client.price)}</span>
+        </div>
+        <div className="client-finance-divider" />
+        <div className="client-finance-item">
+          <span className="client-finance-label">Employee Pay</span>
+          <span className="client-finance-value">{formatCurrency(client.employeePayment)}</span>
+        </div>
+      </div>
+
+      {/* Notes */}
+      {client.notes && client.notes.length > 0 && (
+        <div className="client-notes">
+          <div className="client-notes-header">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="8" y1="13" x2="16" y2="13" />
+              <line x1="8" y1="17" x2="16" y2="17" />
+            </svg>
+            <span className="client-notes-label">
+              Notes <span className="client-notes-count">{client.notes.length}</span>
+            </span>
+          </div>
+          <ul className="client-notes-list">
+            {client.notes.map((note, i) => (
+              <li key={i} className="client-notes-item">{note}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div className="client-actions">
+        <UpdateClient client={client} />
+        <DeleteClient clientID={client.id} />
       </div>
     </div>
   )

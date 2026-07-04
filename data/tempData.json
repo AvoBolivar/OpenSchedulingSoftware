@@ -1,0 +1,197 @@
+{
+  "clients": [
+    {
+      "id": "client-001",
+      "name": "Adams",
+      "address": "4195 Central River Park",
+      "phoneNumber": "770 527 0707",
+      "price": 200,
+      "employeePayment": 90,
+      "notes": ["gate #0707"],
+      "active": true
+    },
+    {
+      "id": "client-002",
+      "name": "Adriana",
+      "address": "4418 Felix Way SE",
+      "phoneNumber": "770 910 5120",
+      "price": 180,
+      "employeePayment": 70,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-003",
+      "name": "Alan",
+      "address": "408 Church Street",
+      "phoneNumber": "770 528 9315",
+      "price": 140,
+      "employeePayment": 60,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-004",
+      "name": "Alex Office",
+      "address": "410 North Main Street",
+      "phoneNumber": "770 880 6917",
+      "price": 100,
+      "employeePayment": 0,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-005",
+      "name": "Amy & Don Pozin",
+      "address": "",
+      "phoneNumber": "404 993 9466",
+      "price": 130,
+      "employeePayment": 60,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-006",
+      "name": "Ana apt cochino",
+      "address": "707 Park Avenue Northeast",
+      "phoneNumber": "678 521 6431",
+      "price": 180,
+      "employeePayment": 0,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-007",
+      "name": "Briana",
+      "address": "3333 Twinrose Place",
+      "phoneNumber": "404 683 9494",
+      "price": 130,
+      "employeePayment": 60,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-008",
+      "name": "Brook",
+      "address": "",
+      "phoneNumber": "910 964 0615",
+      "price": 130,
+      "employeePayment": 60,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-009",
+      "name": "Cherry",
+      "address": "118 Mill Park Chase",
+      "phoneNumber": "678 923 9122",
+      "price": 160,
+      "employeePayment": 60,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-010",
+      "name": "Diana",
+      "address": "",
+      "phoneNumber": "770 366 5283",
+      "price": 100,
+      "employeePayment": 40,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-011",
+      "name": "Eric & Sara",
+      "address": "3126 Lake Ct",
+      "phoneNumber": "",
+      "price": 180,
+      "employeePayment": 60,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-012",
+      "name": "Francis",
+      "address": "2721 Sudbury Trce NE",
+      "phoneNumber": "404 550 2101",
+      "price": 160,
+      "employeePayment": 60,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-013",
+      "name": "Lina Chinita",
+      "address": "3071 Gateland Square",
+      "phoneNumber": "251 623 3888",
+      "price": 130,
+      "employeePayment": 60,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-014",
+      "name": "Mrs. Kristy",
+      "address": "533 Green hill pine",
+      "phoneNumber": "",
+      "price": 220,
+      "employeePayment": 90,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-015",
+      "name": "Mrs.Mary",
+      "address": "2659 Spring Rock Way Northeast",
+      "phoneNumber": "404 520 0464",
+      "price": 120,
+      "employeePayment": 60,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-016",
+      "name": "Natalie",
+      "address": "3184 Westfield Way",
+      "phoneNumber": "256 520 6172",
+      "price": 130,
+      "employeePayment": 60,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-017",
+      "name": "Samaya",
+      "address": "1070 Roswell Manor Cir",
+      "phoneNumber": "404 889 7774",
+      "price": 160,
+      "employeePayment": 60,
+      "notes": [],
+      "active": true
+    },
+    {
+      "id": "client-018",
+      "name": "Sue",
+      "address": "2803 Village Ln",
+      "phoneNumber": "770 757 2585",
+      "price": 110,
+      "employeePayment": 50,
+      "notes": ["gate #250"],
+      "active": true
+    },
+    {
+      "id": "client-019",
+      "name": "Wanda",
+      "address": "7845 Wynfield Drive",
+      "phoneNumber": "770 639 0509",
+      "price": 200,
+      "employeePayment": 60,
+      "notes": [],
+      "active": true
+    }
+  ],
+  "appointments": [],
+  "payments": [],
+  "exportedAt": "2026-06-28T00:00:00.000Z"
+}

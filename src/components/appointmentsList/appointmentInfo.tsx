@@ -17,8 +17,8 @@ interface AppointmentInfoProps {
   setEndTime: (endTime: string) => void;
   rate: string;
   setRate: (rate: string) => void;
-  expense: string
-  setExpense: (expense: string) => void
+  expense: string;
+  setExpense: (expense: string) => void;
 }
 
 export default function AppointmentInfo({
@@ -33,9 +33,9 @@ export default function AppointmentInfo({
   rate,
   setRate,
   expense,
-  setExpense
+  setExpense,
 }: AppointmentInfoProps) {
-  const clients = useClientStore((s) => s.clients)
+  const clients = useClientStore((s) => s.clients);
 
   const eventDates: Date[] = [];
   return (
@@ -80,7 +80,7 @@ export default function AppointmentInfo({
             value={rate}
             onChange={setRate}
           />
-          <Input 
+          <Input
             label="Ines Payment"
             placeholder="50.00"
             value={expense}
