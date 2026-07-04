@@ -78,7 +78,7 @@ export default function CreateClient() {
           </div>
 
           <div className="form-section">
-            <span className="form-section-label">Financial</span>
+            <span className="form-section-label">Financials</span>
             <div className="form-fields form-fields-row">
               <Input
                 label="Price"
