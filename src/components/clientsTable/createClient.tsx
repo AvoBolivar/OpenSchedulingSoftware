@@ -72,13 +72,13 @@ export default function CreateClient() {
             <span className="form-section-label">Basic Info</span>
             <div className="form-fields">
               <Input label="Name" placeholder="George Burdell" value={name} onChange={setName} />
-              <Input label="Phone Number" placeholder="000-111-2233" value={phoneNumber} onChange={setPhoneNumber} />
-              <Input label="Address" placeholder="123 Main St" value={address} onChange={setAddress} />
+              <Input label="Phone Number" placeholder="000-111-2233" value={phoneNumber} inputMode="tel" onChange={setPhoneNumber} />
+              <Input label="Address" placeholder="123 Main St" value={address} inputMode="decimal" onChange={setAddress} />
             </div>
           </div>
 
           <div className="form-section">
-            <span className="form-section-label">Financial</span>
+            <span className="form-section-label">Financials</span>
             <div className="form-fields form-fields-row">
               <Input
                 label="Price"
@@ -86,6 +86,8 @@ export default function CreateClient() {
                 value={String(price)}
                 onChange={(v) => setPrice(Number(v) || 0)}
               />
+            </div>
+            <div className="form-fields form-fields-row">
               <Input
                 label="Employee Payment"
                 placeholder="0"
