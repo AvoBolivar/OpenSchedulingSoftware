@@ -1,0 +1,200 @@
+.create-client-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-family: 'Georgia', serif;
+  color: #450920;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #a53860;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-fields-row {
+  flex-direction: row;
+  gap: 12px;
+}
+
+.form-fields-row > * {
+  flex: 1;
+  min-width: 0;
+}
+
+/* === Toggle === */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff8f5;
+  border: 1px solid #ffa5ab40;
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: border-color 0.2s ease;
+}
+
+.toggle-row:hover {
+  border-color: #da627d40;
+}
+
+.toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.toggle-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #450920;
+}
+
+.toggle-subtitle {
+  font-size: 11px;
+  color: #a53860;
+  opacity: 0.85;
+}
+
+.toggle-switch {
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: #ffa5ab50;
+  border: none;
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.toggle-switch.is-active {
+  background: linear-gradient(135deg, #da627d 0%, #a53860 100%);
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background: #fff8f5;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(69, 9, 32, 0.25);
+}
+
+.toggle-switch.is-active .toggle-knob {
+  transform: translateX(18px);
+}
+
+/* === Notes === */
+.note-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.note-input-row > *:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.note-add-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #da627d 0%, #a53860 100%);
+  color: #fff8f5;
+  border: none;
+  font-size: 22px;
+  font-weight: 300;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(218, 98, 125, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  line-height: 1;
+}
+
+.note-add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(218, 98, 125, 0.4);
+}
+
+.note-add-btn:active {
+  transform: translateY(0);
+}
+
+.note-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.note-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #ffa5ab20;
+  border: 1px solid #ffa5ab40;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.note-text {
+  font-size: 13px;
+  color: #450920;
+  flex: 1;
+  word-break: break-word;
+}
+
+.note-remove-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: #a53860;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  padding: 0;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.note-remove-btn:hover {
+  background: #a53860;
+  color: #fff8f5;
+}
+
+/* === Footer === */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 12px;
+  border-top: 1px solid #ffa5ab30;
+  margin-top: 4px;
+}

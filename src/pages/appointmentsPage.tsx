@@ -5,6 +5,7 @@ import ThemedCalendar from "../components/calendar/calendar";
 import CreateAppointment from "../components/createAppointment/createAppointment";
 import ReadAppointments from "../components/appointmentsList/readAppointments";
 import Button from "../components/basic/button/button";
+import ImportData from "../components/settings/dataHandler/importexportdata";
 import "./pages.css";
 
 export default function AppointmentsPage() {
@@ -67,6 +68,7 @@ export default function AppointmentsPage() {
         label="Delete Data"
         onClick={deleteData}
       />
+      <ImportData />
     </div>
   )
 }

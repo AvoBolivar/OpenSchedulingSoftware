@@ -19,12 +19,21 @@ export default function CreateAppointment() {
   const [expense, setExpense] = useState<string>("0");
   const [rate, setRate] = useState<string>("0");
 
+  function handleClientChange(client: Client | null) {
+    setSelectedClient(client);
+    if (client) {
+      setRate(String(client.price));
+      setExpense(String(client.employeePayment));
+    }
+  }
+
   function resetForm() {
     setSelectedDate(new Date());
     setSelectedClient(null);
     setStartTime("9:00 AM");
     setEndTime("10:00 AM");
     setRate("0");
+    setExpense("0");
   }
 
   function handleCreateAppointment() {
@@ -61,7 +70,7 @@ export default function CreateAppointment() {
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
             selectedClient={selectedClient}
-            setSelectedClient={setSelectedClient}
+            setSelectedClient={handleClientChange}
             startTime={startTime}
             setStartTime={setStartTime}
             endTime={endTime}
