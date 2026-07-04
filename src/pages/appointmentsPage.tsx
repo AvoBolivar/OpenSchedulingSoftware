@@ -64,11 +64,15 @@ export default function AppointmentsPage() {
           <ReadAppointments />
         </div>
       </section>
-      <Button 
-        label="Delete Data"
-        onClick={deleteData}
-      />
-      <ImportData />
+      <section className="section">
+        <div className="button-section">
+          <Button
+            label="Delete Data"
+            onClick={deleteData}
+          />
+          <ImportData />
+        </div>
+      </section>
     </div>
   )
 }
