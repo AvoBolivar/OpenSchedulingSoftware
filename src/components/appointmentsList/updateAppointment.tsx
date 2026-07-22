@@ -8,8 +8,8 @@ import { toDateKey } from "../../lib/date";
 import Modal from "../modal/modal";
 import Button from "../basic/button/button";
 import AppointmentInfo from "./appointmentInfo";
-import AppointmentFinished from "../confirmationModals/AppointmentFinished";
-import "../createAppointment/createAppointment.css";
+import AppointmentFinished from "../confirmationModals/appointmentFinished";
+import "./createAppointment.css";
 
 interface UpdateAppointmentProps {
   isModalOpen: boolean;

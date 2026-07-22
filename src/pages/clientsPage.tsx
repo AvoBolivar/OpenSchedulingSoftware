@@ -1,5 +1,5 @@
-import ClientsTable from "../components/clientsTable/clientsTable";
-import CreateClient from "../components/clientsTable/createClient";
+import ClientsList from "../components/clientsList/clientsList";
+import CreateClient from "../components/clientsList/createClient";
 import "./pages.css";
 
 export default function ClientsPage() {
@@ -13,7 +13,7 @@ export default function ClientsPage() {
       <section className="section">
         <span className="section__label">Directory</span>
         <div className="panel">
-          <ClientsTable />
+          <ClientsList />
         </div>
         <hr className="divider" />
         <CreateClient />

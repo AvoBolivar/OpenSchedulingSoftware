@@ -33,7 +33,7 @@ export default function Home() {
         <NavBar current={page} onChange={setPage} />
       </header>
 
-      <main style={{ padding: "8px 16px 40px" }}>
+      <main style={{ padding: "4px 16px 40px" }}>
         {page === "appointments" && <AppointmentsPage />}
         {page === "finance" && <FinancePage />}
         {page === "clients" && <ClientsPage />}

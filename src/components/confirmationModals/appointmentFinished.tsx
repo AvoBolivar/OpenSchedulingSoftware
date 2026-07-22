@@ -1,5 +1,6 @@
+import { SquareCheckBig, CreditCard, UserCheck, Check } from "lucide-react";
 import Checkbox from "../basic/checkbox/checkbox";
-import "./AppointmentFinished.css"
+import "./appointmentFinished.css"
 
 interface AppointmentFinishedProps {
   jobFinished: boolean
@@ -25,12 +26,7 @@ export default function AppointmentFinished({
       description: "Mark when the work is done",
       checked: jobFinished,
       onChange: setJobFinished,
-      icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M9 11l3 3L22 4" />
-          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-        </svg>
-      ),
+      icon: <SquareCheckBig width={18} height={18} />,
     },
     {
       key: "jobPaid",
@@ -38,13 +34,7 @@ export default function AppointmentFinished({
       description: "Client has paid for the job",
       checked: jobPaid,
       onChange: setJobPaid,
-      icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="6" width="20" height="12" rx="2" />
-          <circle cx="12" cy="12" r="2" />
-          <path d="M6 12h.01M18 12h.01" />
-        </svg>
-      ),
+      icon: <CreditCard width={18} height={18} />,
     },
     {
       key: "helperPaid",
@@ -52,13 +42,7 @@ export default function AppointmentFinished({
       description: "Helper has been compensated",
       checked: helperPaid,
       onChange: setHelperPaid,
-      icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <path d="M22 11l-3 3-2-2" />
-        </svg>
-      ),
+      icon: <UserCheck width={18} height={18} />,
     },
   ]
 
@@ -76,9 +60,7 @@ export default function AppointmentFinished({
           <p className="af-subtitle">
             {allDone ? (
               <>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: "-2px", marginRight: 4 }}>
-                  <path d="M20 6 9 17l-5-5" />
-                </svg>
+                <Check width={14} height={14} strokeWidth={3} style={{ verticalAlign: "-2px", marginRight: 4 }} />
                 All tasks complete
               </>
             ) : (

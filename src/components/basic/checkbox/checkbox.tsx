@@ -1,3 +1,4 @@
+import { Check } from "lucide-react"
 import "./checkbox.css"
 
 interface CheckboxProps {
@@ -18,20 +19,7 @@ export default function Checkbox({ label, checked, onChange, disabled = false }:
         disabled={disabled}
       />
       <span className={`cb-box ${checked ? "checked" : ""}`}>
-        <svg
-          className="cb-check-icon"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M20 6 9 17l-5-5" />
-        </svg>
+        <Check className="cb-check-icon" width={14} height={14} strokeWidth={3.5} aria-hidden="true" />
       </span>
       <span className="cb-label">{label}</span>
     </label>

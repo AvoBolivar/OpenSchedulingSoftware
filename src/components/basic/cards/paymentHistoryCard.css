@@ -1,0 +1,89 @@
+.payment-history-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #fff8f5;
+  border: 1px solid #ffa5ab40;
+  border-left: 3px solid #a53860;
+  border-radius: 10px;
+  padding: 16px 18px;
+  max-width: 480px;
+  cursor: pointer;
+  font-family: 'Georgia', serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.payment-history-card:hover {
+  border-color: #da627d60;
+  border-left-color: #450920;
+  box-shadow: 0 4px 14px rgba(165, 56, 96, 0.12);
+  transform: translateY(-1px);
+}
+
+.payment-history-card:focus-visible {
+  outline: 2px solid #da627d;
+  outline-offset: 3px;
+}
+
+.payment-history-card:active {
+  transform: translateY(0);
+}
+
+/* === Main info === */
+.payment-history-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.payment-history-name {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #450920;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payment-history-detail {
+  margin: 0;
+  font-size: 13px;
+  color: #450920aa;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* === Received date === */
+.payment-history-date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+  padding-left: 16px;
+  border-left: 1px dashed #ffa5ab50;
+}
+
+.payment-history-date-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #a53860;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.payment-history-date-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #450920;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
