@@ -1,6 +1,8 @@
 import { useMemo } from "react"
+import { ChartLine, Calendar, Clock, UserCheck, CreditCard, Wallet } from "lucide-react"
 import FinanceCard from "../components/basic/cards/financeCard"
 import CollectionsList from "../components/collectionsList/collectionsList"
+import ReadPaymentHistory from "../components/collectionsList/readPaymentHistory"
 import { usePaymentStore } from "../stores/usePaymentStore"
 import "./pages.css"
 
@@ -23,6 +25,14 @@ export default function FinancePage() {
     () => usePaymentStore.getState().getTotalNeededToPayOut(),
     [payments]
   )
+  const totalCollected = useMemo(
+    () => usePaymentStore.getState().getTotalCollected(),
+    [payments]
+  )
+  const netAfterPayouts = useMemo(
+    () => usePaymentStore.getState().getTotalNetAfterPayouts(),
+    [payments]
+  )
 
   return (
     <div className="page">
@@ -41,10 +51,7 @@ export default function FinancePage() {
             amount={totalWeek}
             colorScheme="rose"
             icon={
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 3v18h18" />
-                <path d="m19 9-5 5-4-4-3 3" />
-              </svg>
+              <ChartLine />
             }
           />
           <FinanceCard
@@ -52,10 +59,7 @@ export default function FinancePage() {
             amount={totalMonth}
             colorScheme="blush"
             icon={
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" />
-                <path d="M16 2v4M8 2v4M3 10h18" />
-              </svg>
+              <Calendar />
             }
           />
           <FinanceCard
@@ -63,10 +67,7 @@ export default function FinancePage() {
             amount={totalOwed}
             colorScheme="deep"
             icon={
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 6v6l4 2" />
-              </svg>
+              <Clock />
             }
           />
           <FinanceCard
@@ -74,11 +75,23 @@ export default function FinancePage() {
             amount={payout}
             colorScheme="plum"
             icon={
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M22 11l-3 3-2-2" />
-              </svg>
+              <UserCheck />
+            }
+          />
+          <FinanceCard
+            label="Total Collected"
+            amount={totalCollected}
+            colorScheme="berry"
+            icon={
+              <CreditCard />
+            }
+          />
+          <FinanceCard
+            label="Net After Payouts"
+            amount={netAfterPayouts}
+            colorScheme="coral"
+            icon={
+              <Wallet />
             }
           />
         </div>
@@ -88,6 +101,13 @@ export default function FinancePage() {
         <span className="section__label">People Who Owe Money</span>
         <div className="panel">
           <CollectionsList />
+        </div>
+      </section>
+
+      <section className="section">
+        <span className="section__label">Payment History</span>
+        <div className="panel">
+          <ReadPaymentHistory />
         </div>
       </section>
     </div>

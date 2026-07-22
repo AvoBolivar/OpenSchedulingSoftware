@@ -13,6 +13,11 @@ interface Collection {
   appointment: Appointment
 }
 
+interface ReceivedPayment {
+  client: Client
+  payment: Payment
+}
+
 interface PaymentState {
   payments: Payment[]
   selectedPaymentID: string | null
@@ -27,10 +32,13 @@ interface PaymentState {
 
   getPaymentsOwed: () => Collection[]
   getPaymentsToPayout: () => Collection[]
+  getReceivedPayments: () => ReceivedPayment[]
   getTotalMadeThisWeek: () => number
   getTotalMadeThisMonth: () => number
   getTotalOwed: () => number
   getTotalNeededToPayOut: () => number
+  getTotalCollected: () => number
+  getTotalNetAfterPayouts: () => number
 
   payHelper: (appointmentID: string) => void
 }
@@ -129,6 +137,27 @@ export const usePaymentStore = create<PaymentState>()(
 
       },
 
+      getReceivedPayments: () => {
+        const { appointments } = useAppointmentStore.getState()
+        const { clients } = useClientStore.getState()
+
+        return get()
+          .payments.filter((p) => p.paymentReceived)
+          .map((p) => {
+            const appointment = appointments.find(
+              (a) => a.id === p.appointmentID
+            )
+            const client = appointment
+              ? clients.find((c) => c.id === appointment.clientID)
+              : undefined
+            return client ? { client, payment: p } : null
+          })
+          .filter((r): r is ReceivedPayment => r !== null)
+          .sort(
+            (a, b) => new Date(b.payment.date).getTime() - new Date(a.payment.date).getTime()
+          )
+      },
+
       getTotalMadeThisWeek: () => {
         const { appointments } = useAppointmentStore.getState()
         return totalReceivedSince(
@@ -160,6 +189,22 @@ export const usePaymentStore = create<PaymentState>()(
             const appt = appointments.find((a) => a.id === p.appointmentID)
             return sum + (appt?.expense ?? 0)
           }, 0)
+      },
+
+      getTotalCollected: () => {
+        const { appointments } = useAppointmentStore.getState()
+        return totalReceivedSince(get().payments, appointments, new Date(0))
+      },
+
+      getTotalNetAfterPayouts: () => {
+        const { appointments } = useAppointmentStore.getState()
+        const paidOut = get()
+          .payments.filter((p) => p.expensesPaid)
+          .reduce((sum, p) => {
+            const appt = appointments.find((a) => a.id === p.appointmentID)
+            return sum + (appt?.expense ?? 0)
+          }, 0)
+        return get().getTotalCollected() - paidOut
       },
 
       payHelper: (appointmentID) => {

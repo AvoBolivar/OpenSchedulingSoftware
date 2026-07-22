@@ -3,7 +3,7 @@ import Button from "../basic/button/button";
 import { usePaymentStore } from "../../stores/usePaymentStore";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";
 import type { Payment } from "../../definitions/payments";
-import "./PayHelper.css";
+import "./payHelper.css";
 
 interface PayHelperModalProps {
   isModalOpen: boolean;

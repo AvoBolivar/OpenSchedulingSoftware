@@ -1,6 +1,6 @@
 import ReadClients from "./readClients";
 
-export default function ClientsTable() {
+export default function ClientsList() {
 
   return (
     <>

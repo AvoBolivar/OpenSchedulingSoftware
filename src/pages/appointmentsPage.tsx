@@ -2,10 +2,10 @@ import { useMemo } from "react";
 import { useAppointmentStore } from "../stores/useAppointmentStore";
 import { useShallow } from "zustand/shallow";
 import ThemedCalendar from "../components/calendar/calendar";
-import CreateAppointment from "../components/createAppointment/createAppointment";
+import CreateAppointment from "../components/appointmentsList/createAppointment";
 import ReadAppointments from "../components/appointmentsList/readAppointments";
 import Button from "../components/basic/button/button";
-import ImportData from "../components/settings/dataHandler/importexportdata";
+import ImportExportData from "../components/settings/importExportData";
 import "./pages.css";
 
 export default function AppointmentsPage() {
@@ -67,7 +67,7 @@ export default function AppointmentsPage() {
             label="Delete Data"
             onClick={deleteData}
           />
-          <ImportData />
+          <ImportExportData />
         </div>
       </section>
     </div>

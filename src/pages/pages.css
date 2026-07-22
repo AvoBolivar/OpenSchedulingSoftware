@@ -3,10 +3,12 @@
 .page {
   max-width: 920px;
   margin: 0 auto;
-  /* mobile-first padding; safe-area for notched phones */
   padding: 20px 16px calc(44px + env(safe-area-inset-bottom));
   padding-left: max(16px, env(safe-area-inset-left));
   padding-right: max(16px, env(safe-area-inset-right));
+  /* ensure padding is included in width and nothing overflows */
+  box-sizing: border-box;
+  width: 100%;
   font-family: Georgia, "Times New Roman", serif;
   color: #450920;
 }
@@ -52,9 +54,10 @@
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 2px 14px rgba(69, 9, 32, 0.07);
-  /* prevent inner content (calendar, lists) from forcing horizontal scroll */
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  /* keep content contained without a scroll shift */
+  overflow: hidden;
+  /* guard against a wide child stretching the panel itself */
+  min-width: 0;
 }
 
 /* Dashed divider */

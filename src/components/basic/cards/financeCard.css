@@ -122,6 +122,26 @@
 .finance-plum::after { background: #450920; }
 .finance-plum:hover { border-color: #45092040; }
 
+/* Berry — for all-time gross collected */
+.finance-berry .finance-icon {
+  background: #a5386020;
+  color: #450920;
+}
+.finance-berry .finance-amount { color: #450920; }
+.finance-berry .finance-label { color: #a53860; }
+.finance-berry::after { background: #a53860; }
+.finance-berry:hover { border-color: #a5386050; }
+
+/* Coral — for net after payouts */
+.finance-coral .finance-icon {
+  background: #ffa5ab50;
+  color: #a53860;
+}
+.finance-coral .finance-amount { color: #450920; }
+.finance-coral .finance-label { color: #a53860; }
+.finance-coral::after { background: #ffa5ab; }
+.finance-coral:hover { border-color: #a5386050; }
+
 /* === Grid container === */
 .finance-grid {
   display: grid;

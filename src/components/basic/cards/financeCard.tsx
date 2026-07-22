@@ -1,6 +1,6 @@
 import "./financeCard.css"
 
-type FinanceColorScheme = "rose" | "deep" | "blush" | "plum"
+type FinanceColorScheme = "rose" | "deep" | "blush" | "plum" | "berry" | "coral"
 
 interface FinanceCardProps {
   label: string

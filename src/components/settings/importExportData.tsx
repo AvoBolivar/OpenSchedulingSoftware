@@ -1,8 +1,8 @@
-import { exportData } from "../../../lib/exportData";
-import { importData } from "../../../lib/importData";
+import { exportData } from "../../lib/exportData";
+import { importData } from "../../lib/importData";
 
 
-const ImportData = () => {
+const ImportExportData = () => {
   return (
     <div>
       <button onClick={exportData}>Export</button>
@@ -25,4 +25,4 @@ const ImportData = () => {
   )
 }
 
-export default ImportData
+export default ImportExportData
