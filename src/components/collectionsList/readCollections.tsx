@@ -6,7 +6,7 @@ import { usePaymentStore } from "../../stores/usePaymentStore";
 import CollectionCard from "../basic/cards/collectionCard";
 import PayoutCard from "../basic/cards/payoutCard";
 import UpdateCollection from "./updateCollection";
-import PayHelperModal from "../confirmationModals/PayHelper";
+import PayHelperModal from "../confirmationModals/payHelper";
 
 interface ReadCollectionsProps {
   type: string;

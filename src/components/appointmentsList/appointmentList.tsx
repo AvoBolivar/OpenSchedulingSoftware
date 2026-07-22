@@ -1,5 +1,5 @@
 import ReadAppointments from "./readAppointments";
-import CreateAppointment from "../createAppointment/createAppointment";
+import CreateAppointment from "./createAppointment";
 
 export default function AppointmentList() {
   return (

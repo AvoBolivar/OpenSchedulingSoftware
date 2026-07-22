@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Button from "../basic/button/button";
-import AppointmentInfo from "../appointmentsList/appointmentInfo";
+import AppointmentInfo from "./appointmentInfo";
 import Modal from "../modal/modal";
 import type { Client } from "../../definitions/client";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react"
+import { Clock, ChevronDown } from "lucide-react"
 import "./timePicker.css"
 
 interface TimePickerProps {
@@ -51,37 +52,11 @@ export default function TimePicker({ label, value, onChange }: TimePickerProps) 
         className={`tp-input ${isOpen ? "open" : ""}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <svg
-          className="tp-clock-icon"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12 6 12 12 16 14" />
-        </svg>
+        <Clock className="tp-clock-icon" width={16} height={16} aria-hidden="true" />
         <span className="tp-value">
           {hour}:{minute.toString().padStart(2, "0")} {period}
         </span>
-        <svg
-          className={`tp-chevron ${isOpen ? "open" : ""}`}
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="m6 9 6 6 6-6" />
-        </svg>
+        <ChevronDown className={`tp-chevron ${isOpen ? "open" : ""}`} width={16} height={16} />
       </button>
 
       {isOpen && (

@@ -4,7 +4,7 @@ import Autocomplete from "../basic/autocomplete/autocomplete";
 import TimePicker from "../basic/time/timePicker";
 import { useClientStore } from "../../stores/useClientStore";
 import type { Client } from "../../definitions/client";
-import "../createAppointment/createAppointment.css";
+import "./createAppointment.css";
 
 interface AppointmentInfoProps {
   selectedDate: Date;

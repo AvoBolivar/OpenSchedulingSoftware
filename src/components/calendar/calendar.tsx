@@ -1,4 +1,5 @@
 import Calendar from "react-calendar"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import "./calendar.css"
 
 interface ThemedCalendarProps {
@@ -31,16 +32,8 @@ export default function ThemedCalendar({
         className="themed-calendar"
         prev2Label={null}
         next2Label={null}
-        prevLabel={
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m15 18-6-6 6-6" />
-          </svg>
-        }
-        nextLabel={
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m9 18 6-6-6-6" />
-          </svg>
-        }
+        prevLabel={<ChevronLeft width={18} height={18} strokeWidth={2.5} />}
+        nextLabel={<ChevronRight width={18} height={18} strokeWidth={2.5} />}
         formatShortWeekday={(_locale, date) =>
           ["S", "M", "T", "W", "T", "F", "S"][date.getDay()]
         }

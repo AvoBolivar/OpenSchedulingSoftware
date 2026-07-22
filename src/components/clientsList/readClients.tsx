@@ -1,6 +1,6 @@
 import type { Client } from "../../definitions/client"
 import { useClientStore } from "../../stores/useClientStore"
-import ClientCard from "../basic/cards/clientCard"
+import ClientCard from "./clientCard"
 import "./readClients.css"
 
 export default function ReadClients() {
