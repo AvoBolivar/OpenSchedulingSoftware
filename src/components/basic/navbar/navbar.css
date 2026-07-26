@@ -1,7 +1,10 @@
 .navbar {
-  display: inline-flex;
+  display: flex;
   gap: 4px;
   padding: 6px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
   background: #fff8f5;
   border: 1px solid rgba(255, 165, 171, 0.55);
   border-radius: 16px;
@@ -9,13 +12,21 @@
   font-family: Georgia, "Times New Roman", serif;
 }
 
+/* Mobile-first: compact enough that all three labels fit on one line
+   without wrapping or ellipsis-truncating, down to ~340px viewports. */
 .navbar__tab {
+  flex: 1;
+  min-width: 0;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.09em;
-  padding: 10px 22px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 10px 4px;
+  min-height: 44px;
   border-radius: 10px;
   cursor: pointer;
   outline: none;
@@ -30,6 +41,19 @@
     box-shadow 0.2s ease,
     transform 0.15s ease,
     border-color 0.2s ease;
+}
+
+/* Tablet and up: roomier natural-width pill instead of stretching edge-to-edge */
+@media (min-width: 560px) {
+  .navbar {
+    width: auto;
+  }
+  .navbar__tab {
+    flex: none;
+    font-size: 13px;
+    letter-spacing: 0.09em;
+    padding: 10px 22px;
+  }
 }
 
 /* Hover — only applies to inactive tabs */

@@ -4,6 +4,7 @@ import type { Payment } from "../../definitions/payments";
 import { useClientStore } from "../../stores/useClientStore";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";
 import { usePaymentStore } from "../../stores/usePaymentStore";
+import { fromDateKey } from "../../lib/date";
 import Modal from "../modal/modal";
 import Button from "../basic/button/button";
 import Autocomplete from "../basic/autocomplete/autocomplete";
@@ -49,7 +50,7 @@ export default function UpdateCollection({
     .join("")
     .toUpperCase();
 
-  const dateObj = new Date(appointment.date);
+  const dateObj = fromDateKey(appointment.date);
   const formattedDate = dateObj.toLocaleDateString("en-US", {
     weekday: "short",
     month: "short",

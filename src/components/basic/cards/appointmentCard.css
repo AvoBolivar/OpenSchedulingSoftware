@@ -1,17 +1,25 @@
 .appt-card {
   display: flex;
   align-items: stretch;
-  gap: 16px;
+  gap: 10px;
   background: #fff8f5;
   border: 1px solid #ffa5ab40;
   border-radius: 14px;
-  padding: 16px 18px;
+  padding: 14px 12px;
   max-width: 480px;
   cursor: pointer;
   font-family: 'Georgia', serif;
   box-shadow: 0 2px 10px rgba(69, 9, 32, 0.06);
   transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
   position: relative;
+}
+
+/* Tablet and up: roomier padding now that width is less of a constraint */
+@media (min-width: 560px) {
+  .appt-card {
+    gap: 16px;
+    padding: 16px 18px;
+  }
 }
 
 .appt-card:hover {
@@ -37,9 +45,16 @@
   justify-content: center;
   background: linear-gradient(180deg, #ffa5ab30 0%, #ffa5ab15 100%);
   border-radius: 10px;
-  padding: 12px 16px;
-  min-width: 72px;
+  padding: 10px 10px;
+  min-width: 56px;
   flex-shrink: 0;
+}
+
+@media (min-width: 560px) {
+  .appt-date-block {
+    padding: 12px 16px;
+    min-width: 72px;
+  }
 }
 
 .appt-weekday {
@@ -173,6 +188,28 @@
 .appt-card:hover .appt-chevron {
   color: #da627d;
   transform: translateX(3px);
+}
+
+.appt-card-completed {
+  opacity: 0.72;
+}
+
+.appt-completed-badge {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #2f855a;
+  background: #2f855a1a;
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  pointer-events: none;
 }
 
 .appt-card-loading {

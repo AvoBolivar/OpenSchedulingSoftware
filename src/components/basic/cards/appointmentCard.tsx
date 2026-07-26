@@ -1,6 +1,7 @@
-import { Clock, MapPin, Phone, ChevronRight } from "lucide-react"
+import { Clock, MapPin, Phone, ChevronRight, CheckCircle2 } from "lucide-react"
 import type { Appointment } from "../../../definitions/appointments"
 import { useClientStore } from "../../../stores/useClientStore"
+import { fromDateKey } from "../../../lib/date"
 import "./appointmentCard.css"
 
 interface AppointmentCardProps {
@@ -27,7 +28,7 @@ export default function AppointmentCard({ appointment, onClick }: AppointmentCar
 
 
   // Parse the date to extract day number and month
-  const dateObj = new Date(appointment.date)
+  const dateObj = fromDateKey(appointment.date)
   const day = dateObj.getDate()
   const month = dateObj.toLocaleString("en-US", { month: "short" })
   const weekday = dateObj.toLocaleString("en-US", { weekday: "short" })
@@ -46,9 +47,11 @@ export default function AppointmentCard({ appointment, onClick }: AppointmentCar
       ? `$${appointment.charge.toFixed(2)}`
       : appointment.charge
 
+  const isCompleted = !appointment.show
+
   return (
     <div
-      className="appt-card"
+      className={`appt-card${isCompleted ? " appt-card-completed" : ""}`}
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -97,6 +100,13 @@ export default function AppointmentCard({ appointment, onClick }: AppointmentCar
           </div>
         </div>
       </div>
+
+      {isCompleted && (
+        <span className="appt-completed-badge">
+          <CheckCircle2 width={12} height={12} aria-hidden="true" />
+          Completed
+        </span>
+      )}
 
       {/* Chevron indicator */}
       <ChevronRight className="appt-chevron" width={18} height={18} aria-hidden="true" />

@@ -6,12 +6,14 @@ interface ThemedCalendarProps {
   value: Date | null
   onChange: (date: Date) => void
   eventDates?: Date[]
+  minDate?: Date
 }
 
 export default function ThemedCalendar({
   value,
   onChange,
   eventDates = [],
+  minDate,
 }: ThemedCalendarProps) {
   // Normalize dates to YYYY-MM-DD for fast lookup
   const eventDateSet = new Set(
@@ -29,7 +31,9 @@ export default function ThemedCalendar({
         onChange={(val) => {
           if (val instanceof Date) onChange(val)
         }}
+        minDate={minDate}
         className="themed-calendar"
+        calendarType="gregory"
         prev2Label={null}
         next2Label={null}
         prevLabel={<ChevronLeft width={18} height={18} strokeWidth={2.5} />}

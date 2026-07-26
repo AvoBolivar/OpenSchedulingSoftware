@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useClientStore } from "../../stores/useClientStore"
 import type { Client } from "../../definitions/client"
 import Input from "../basic/input/input"
+import TimePicker from "../basic/time/timePicker"
 import Button from "../basic/button/button"
 import Modal from "../modal/modal"
 import "./createClient.css"
@@ -18,6 +19,8 @@ export default function UpdateClient({ client }: UpdateClientProps) {
   const [address, setAddress] = useState(client.address)
   const [price, setPrice] = useState(client.price)
   const [employeePayment, setEmployeePayment] = useState(client.employeePayment)
+  const [defaultStartTime, setDefaultStartTime] = useState(client.defaultStartTime ?? "9:00 AM")
+  const [defaultEndTime, setDefaultEndTime] = useState(client.defaultEndTime ?? "10:00 AM")
   const [notes, setNotes] = useState<string[]>(client.notes ?? [])
   const [noteDraft, setNoteDraft] = useState("")
   const [active, setActive] = useState(client.active)
@@ -29,6 +32,8 @@ export default function UpdateClient({ client }: UpdateClientProps) {
     setAddress(client.address)
     setPrice(client.price)
     setEmployeePayment(client.employeePayment)
+    setDefaultStartTime(client.defaultStartTime ?? "9:00 AM")
+    setDefaultEndTime(client.defaultEndTime ?? "10:00 AM")
     setNotes(client.notes ?? [])
     setNoteDraft("")
     setActive(client.active)
@@ -53,6 +58,8 @@ export default function UpdateClient({ client }: UpdateClientProps) {
       address,
       price,
       employeePayment,
+      defaultStartTime,
+      defaultEndTime,
       notes,
       active,
     })
@@ -75,6 +82,11 @@ export default function UpdateClient({ client }: UpdateClientProps) {
               <Input label="Phone Number" placeholder="000-111-2233" value={phoneNumber} onChange={setPhoneNumber} />
               <Input label="Address" placeholder="123 Main St" value={address} onChange={setAddress} />
             </div>
+          </div>
+
+          <div className="form-section">
+            <span className="form-section-label">Financials</span>
+            <div className="form-fields form-fields-row">
               <Input
                 label="Price"
                 placeholder="0"
@@ -87,6 +99,23 @@ export default function UpdateClient({ client }: UpdateClientProps) {
                 value={String(employeePayment)}
                 onChange={(v) => setEmployeePayment(Number(v) || 0)}
               />
+            </div>
+          </div>
+
+          <div className="form-section">
+            <span className="form-section-label">Schedule</span>
+            <div className="form-fields form-fields-row">
+              <TimePicker
+                label="Default Start Time"
+                value={defaultStartTime}
+                onChange={setDefaultStartTime}
+              />
+              <TimePicker
+                label="Default End Time"
+                value={defaultEndTime}
+                onChange={setDefaultEndTime}
+              />
+            </div>
           </div>
 
           <div className="form-section">

@@ -4,7 +4,7 @@ import type { Client } from "../../definitions/client";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";
 import { useClientStore } from "../../stores/useClientStore";
 import { usePaymentStore } from "../../stores/usePaymentStore";
-import { toDateKey } from "../../lib/date";
+import { toDateKey, fromDateKey } from "../../lib/date";
 import Modal from "../modal/modal";
 import Button from "../basic/button/button";
 import AppointmentInfo from "./appointmentInfo";
@@ -60,7 +60,7 @@ function UpdateAppointmentForm({
   const createPayment = usePaymentStore((s) => s.createPayment);
 
   // updating the appointment
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(appointment.date));
+  const [selectedDate, setSelectedDate] = useState<Date>(fromDateKey(appointment.date));
   const [selectedClient, setSelectedClient] = useState<Client | null>(client);
   const [startTime, setStartTime] = useState<string>(appointment.startTime);
   const [endTime, setEndTime] = useState<string>(appointment.endTime);
@@ -75,7 +75,7 @@ function UpdateAppointmentForm({
   const [componentDisplayed, setComponentDisplayed] = useState<string>("Update");
 
   function resetForm() {
-    setSelectedDate(new Date(appointment.date));
+    setSelectedDate(fromDateKey(appointment.date));
     setSelectedClient(client);
     setStartTime(appointment.startTime);
     setEndTime(appointment.endTime);
@@ -142,10 +142,14 @@ function UpdateAppointmentForm({
               expense={expense}
               setExpense={setExpense}
             />
-            <div className="form-actions">
+            <div className="appt-form-actions">
               <Button label="Update Appointment" onClick={() => updateAppointment()} />
               <Button label="Delete Appointment" onClick={deleteAppointment} />
-              <Button label="Job Completed" onClick={() => setComponentDisplayed("Complete")} />
+              {appointment.show ? (
+                <Button label="Job Completed" onClick={() => setComponentDisplayed("Complete")} />
+              ) : (
+                <Button label="Mark as Not Done" onClick={() => updateAppointment(true)} />
+              )}
             </div>
           </div>
         ) : (
@@ -158,7 +162,7 @@ function UpdateAppointmentForm({
               helperPaid={helperPaid}
               setHelperPaid={setHelperPaid}
             />
-            <div>
+            <div className="appt-form-actions">
               <Button label="Done" onClick={handleSubmit} />
               <Button label="Back" onClick={() => setComponentDisplayed("Update")} />
             </div>

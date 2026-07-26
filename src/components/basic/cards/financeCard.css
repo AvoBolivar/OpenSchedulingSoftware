@@ -1,12 +1,12 @@
 .finance-card {
-  aspect-ratio: 1 / 1;
+  min-height: 116px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background: #fff8f5;
   border: 1px solid #ffa5ab40;
   border-radius: 16px;
-  padding: 20px;
+  padding: 16px;
   font-family: 'Georgia', serif;
   box-shadow: 0 2px 12px rgba(69, 9, 32, 0.06);
   transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
@@ -64,7 +64,7 @@
 }
 
 .finance-amount {
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.01em;
   line-height: 1.1;
@@ -74,10 +74,20 @@
 }
 
 .finance-label {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+@media (min-width: 480px) {
+  .finance-amount {
+    font-size: 26px;
+  }
+  .finance-label {
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
 }
 
 /* === Color schemes === */
@@ -143,21 +153,27 @@
 .finance-coral:hover { border-color: #a5386050; }
 
 /* === Grid container === */
+/* Mobile-first: two compact columns so cards don't force a full-width square */
 .finance-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  max-width: 900px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 480px) {
   .finance-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
   }
 }
 
-@media (max-width: 420px) {
+@media (min-width: 768px) {
   .finance-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 900px;
+  }
+  .finance-card {
+    padding: 20px;
   }
 }

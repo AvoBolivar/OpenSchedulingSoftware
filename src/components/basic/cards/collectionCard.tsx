@@ -1,5 +1,6 @@
 import type { Client } from "../../../definitions/client"
 import type { Appointment } from "../../../definitions/appointments"
+import { fromDateKey } from "../../../lib/date"
 import "./collectionCard.css"
 
 interface CollectionCardProps {
@@ -10,7 +11,7 @@ interface CollectionCardProps {
 
 export default function CollectionCard({ client, appointment, onClick }: CollectionCardProps) {
   // Format date nicely
-  const dateObj = new Date(appointment.date)
+  const dateObj = fromDateKey(appointment.date)
   const formattedDate = dateObj.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",

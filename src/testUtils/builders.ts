@@ -16,6 +16,8 @@ export function buildClient(overrides: Partial<Client> = {}): Client {
     phoneNumber: '000-000-0000',
     price: 100,
     employeePayment: 25,
+    defaultStartTime: '9:00 AM',
+    defaultEndTime: '10:00 AM',
     notes: [],
     active: true,
     ...overrides,

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import Button from "../basic/button/button";
 import AppointmentInfo from "./appointmentInfo";
+import type { RepeatOption } from "./appointmentInfo";
 import Modal from "../modal/modal";
 import type { Client } from "../../definitions/client";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";
-import { toDateKey } from "../../lib/date";
+import { toDateKey, generateRecurringDates } from "../../lib/date";
 
 import "./createAppointment.css";
 
@@ -18,12 +19,27 @@ export default function CreateAppointment() {
   const [endTime, setEndTime] = useState<string>("10:00 AM");
   const [expense, setExpense] = useState<string>("0");
   const [rate, setRate] = useState<string>("0");
+  const [repeatOption, setRepeatOption] = useState<RepeatOption>("none");
+  const [repeatEndDate, setRepeatEndDate] = useState<Date | null>(null);
+
+  const isRepeating = repeatOption !== "none";
+  // Compare by date-key (not raw Date <) since selectedDate can carry a
+  // time-of-day component while repeatEndDate is always midnight-normalized
+  // by the calendar — a same-day range would otherwise look "invalid".
+  const repeatEndDateInvalid =
+    isRepeating && (!repeatEndDate || toDateKey(repeatEndDate) < toDateKey(selectedDate));
+  const occurrenceDates =
+    isRepeating && repeatEndDate && !repeatEndDateInvalid
+      ? generateRecurringDates(selectedDate, repeatOption, repeatEndDate)
+      : [selectedDate];
 
   function handleClientChange(client: Client | null) {
     setSelectedClient(client);
     if (client) {
       setRate(String(client.price));
       setExpense(String(client.employeePayment));
+      setStartTime(client.defaultStartTime ?? "9:00 AM");
+      setEndTime(client.defaultEndTime ?? "10:00 AM");
     }
   }
 
@@ -34,20 +50,24 @@ export default function CreateAppointment() {
     setEndTime("10:00 AM");
     setRate("0");
     setExpense("0");
+    setRepeatOption("none");
+    setRepeatEndDate(null);
   }
 
   function handleCreateAppointment() {
-    if (!selectedClient) return; // guard — see note below
+    if (!selectedClient || repeatEndDateInvalid) return; // guard — see note below
 
-    createAppointment({
-      clientID: selectedClient.id,
-      startTime,
-      endTime,
-      charge: Number(rate),
-      date: toDateKey(selectedDate),
-      expense: Number(expense),
-      show: true,
-    });
+    for (const date of occurrenceDates) {
+      createAppointment({
+        clientID: selectedClient.id,
+        startTime,
+        endTime,
+        charge: Number(rate),
+        date: toDateKey(date),
+        expense: Number(expense),
+        show: true,
+      });
+    }
 
     resetForm();
     setIsModalOpen(false);
@@ -79,9 +99,24 @@ export default function CreateAppointment() {
             setRate={setRate}
             expense={expense}
             setExpense={setExpense}
+            repeatOption={repeatOption}
+            onRepeatOptionChange={setRepeatOption}
+            repeatEndDate={repeatEndDate}
+            onRepeatEndDateChange={setRepeatEndDate}
           />
-          <div className="form-actions">
-            <Button label="Add Appointment" onClick={handleCreateAppointment} />
+          <div className="appt-form-actions">
+            {isRepeating && (
+              <span className="repeat-summary">
+                {repeatEndDateInvalid
+                  ? "Pick an end date on or after the start date."
+                  : `This will create ${occurrenceDates.length} appointment${occurrenceDates.length === 1 ? "" : "s"}.`}
+              </span>
+            )}
+            <Button
+              label="Add Appointment"
+              onClick={handleCreateAppointment}
+              disabled={!selectedClient || repeatEndDateInvalid}
+            />
           </div>
         </div>
       </Modal>

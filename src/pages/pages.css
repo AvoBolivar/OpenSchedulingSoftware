@@ -68,12 +68,7 @@
   border-top: 1.5px dashed rgba(218, 98, 125, 0.35);
 }
 
-/* Finance summary grid */
-.finance-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
+/* Finance summary grid layout lives in financeCard.css, next to .finance-card */
 
 /* Action buttons: stack on mobile, each a comfortable tap target */
 .button-section {
@@ -104,9 +99,6 @@
   }
   .panel {
     padding: 20px;
-  }
-  .finance-grid {
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   }
   .button-section {
     flex-direction: row;

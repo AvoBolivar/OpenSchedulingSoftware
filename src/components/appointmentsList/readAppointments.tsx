@@ -20,7 +20,7 @@ export default function ReadAppointments({ onlySelectedDay }: ReadAppointmentsPr
     if (onlySelectedDay) {
       return getDayAppointments(toDateKey(selectedDay))
     }
-    return appointments.filter((a) => a.show)
+    return appointments
   }, [onlySelectedDay, appointments, selectedDay, getDayAppointments])
 
   return (

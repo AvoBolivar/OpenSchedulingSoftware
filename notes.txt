@@ -1,0 +1,5 @@
+Things that need to be fixed:
+  - the appointment cards show the date - 1 day
+  - when an appointment is marked as completed, the calendar should still have the incdicator, that an appointment is on that day.
+  - in the selectedDay section, it should show the appointment, regardless of it being completed it or not, just update the appointment card
+  so that it is obvious to the user which appointment has been completed and which one has not.

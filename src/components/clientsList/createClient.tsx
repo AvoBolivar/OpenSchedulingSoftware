@@ -3,6 +3,7 @@ import { useClientStore } from "../../stores/useClientStore"
 import type { Client } from "../../definitions/client"
 import Button from "../basic/button/button"
 import Input from "../basic/input/input"
+import TimePicker from "../basic/time/timePicker"
 import Modal from "../modal/modal"
 import "./createClient.css"
 
@@ -16,6 +17,8 @@ export default function CreateClient() {
   const [address, setAddress] = useState("")
   const [price, setPrice] = useState(0)
   const [employeePayment, setEmployeePayment] = useState(0)
+  const [defaultStartTime, setDefaultStartTime] = useState("9:00 AM")
+  const [defaultEndTime, setDefaultEndTime] = useState("10:00 AM")
   const [notes, setNotes] = useState<string[]>([])
   const [noteDraft, setNoteDraft] = useState("")
   const [active, setActive] = useState(true)
@@ -26,6 +29,8 @@ export default function CreateClient() {
     setAddress("")
     setPrice(0)
     setEmployeePayment(0)
+    setDefaultStartTime("9:00 AM")
+    setDefaultEndTime("10:00 AM")
     setNotes([])
     setNoteDraft("")
     setActive(true)
@@ -49,6 +54,8 @@ export default function CreateClient() {
       address,
       price,
       employeePayment,
+      defaultStartTime,
+      defaultEndTime,
       notes,
       active,
     }
@@ -86,13 +93,27 @@ export default function CreateClient() {
                 value={String(price)}
                 onChange={(v) => setPrice(Number(v) || 0)}
               />
-            </div>
-            <div className="form-fields form-fields-row">
               <Input
                 label="Employee Payment"
                 placeholder="0"
                 value={String(employeePayment)}
                 onChange={(v) => setEmployeePayment(Number(v) || 0)}
+              />
+            </div>
+          </div>
+
+          <div className="form-section">
+            <span className="form-section-label">Schedule</span>
+            <div className="form-fields form-fields-row">
+              <TimePicker
+                label="Default Start Time"
+                value={defaultStartTime}
+                onChange={setDefaultStartTime}
+              />
+              <TimePicker
+                label="Default End Time"
+                value={defaultEndTime}
+                onChange={setDefaultEndTime}
               />
             </div>
           </div>
