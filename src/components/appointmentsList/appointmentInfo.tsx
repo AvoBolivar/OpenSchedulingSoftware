@@ -60,11 +60,14 @@ export default function AppointmentInfo({
   return (
     <div>
       <div className="calendar-section">
-        <ThemedCalendar
-          value={selectedDate}
-          onChange={setSelectedDate}
-          eventDates={eventDates}
-        />
+        <div className="calendar-label">
+          <span className="appt-form-label">Starts On</span>
+        </div>
+          <ThemedCalendar
+            value={selectedDate}
+            onChange={setSelectedDate}
+            eventDates={eventDates}
+          />
       </div>
 
       {onRepeatOptionChange && (

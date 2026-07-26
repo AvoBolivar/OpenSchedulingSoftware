@@ -26,8 +26,13 @@
   padding: 0 4px 16px;
 }
 
+.calendar-label {
+  place-self: start;
+  margin-bottom: 5px;
+}
+
 .appt-form-label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: #a53860;
   letter-spacing: 0.08em;

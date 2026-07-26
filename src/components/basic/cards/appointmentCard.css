@@ -3,13 +3,14 @@
   align-items: stretch;
   gap: 10px;
   background: #fff8f5;
-  border: 1px solid #ffa5ab40;
-  border-radius: 14px;
+  border: 1px solid #ffa5ab35;
+  border-left: 3px solid transparent;
+  border-radius: 10px;
   padding: 14px 12px;
   max-width: 480px;
   cursor: pointer;
   font-family: 'Georgia', serif;
-  box-shadow: 0 2px 10px rgba(69, 9, 32, 0.06);
+  box-shadow: 0 1px 4px rgba(69, 9, 32, 0.05);
   transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
   position: relative;
 }
@@ -22,10 +23,14 @@
   }
 }
 
+/* Only the top/right/bottom border tints on hover — border-left carries the
+   status accent (green once completed) and must stay put regardless. */
 .appt-card:hover {
-  box-shadow: 0 8px 24px rgba(165, 56, 96, 0.15);
-  transform: translateY(-2px);
-  border-color: #da627d80;
+  box-shadow: 0 4px 14px rgba(165, 56, 96, 0.12);
+  transform: translateY(-1px);
+  border-top-color: #da627d60;
+  border-right-color: #da627d60;
+  border-bottom-color: #da627d60;
 }
 
 .appt-card:focus-visible {
@@ -43,11 +48,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #ffa5ab30 0%, #ffa5ab15 100%);
-  border-radius: 10px;
+  background: #ffa5ab1f;
+  border-radius: 8px;
   padding: 10px 10px;
   min-width: 56px;
   flex-shrink: 0;
+  transition: background 0.2s ease;
 }
 
 @media (min-width: 560px) {
@@ -97,7 +103,7 @@
   align-items: center;
   gap: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px dashed #ffa5ab50;
+  border-bottom: 1px solid #ffa5ab30;
 }
 
 .appt-avatar {
@@ -113,16 +119,15 @@
   font-weight: 700;
   letter-spacing: 0.03em;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(218, 98, 125, 0.3);
+  transition: background 0.2s ease;
 }
 
 .appt-client-info {
   flex: 1;
   min-width: 0;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .appt-client-name {
@@ -136,12 +141,33 @@
   white-space: nowrap;
 }
 
+.appt-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .appt-charge {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   color: #a53860;
   background: #ffa5ab25;
-  padding: 4px 10px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.appt-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #2f855a;
+  background: #2f855a16;
+  padding: 3px 8px;
   border-radius: 6px;
   letter-spacing: 0.02em;
   flex-shrink: 0;
@@ -190,26 +216,36 @@
   transform: translateX(3px);
 }
 
+/* Completed state: a solid left accent plus a tinted date block and avatar
+   make status readable at a glance in a scrolled list, without dimming
+   (and thereby obscuring) the appointment's actual details. */
 .appt-card-completed {
-  opacity: 0.72;
+  border-left-color: #2f855a;
+  background: #fbfaf7;
 }
 
-.appt-completed-badge {
-  position: absolute;
-  top: 12px;
-  right: 18px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 10px;
-  font-weight: 700;
+.appt-card-completed .appt-date-block {
+  background: #2f855a14;
+}
+
+.appt-card-completed .appt-weekday,
+.appt-card-completed .appt-day,
+.appt-card-completed .appt-month {
   color: #2f855a;
-  background: #2f855a1a;
-  padding: 3px 8px;
-  border-radius: 999px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  pointer-events: none;
+}
+
+.appt-card-completed .appt-avatar {
+  background: #2f855a;
+}
+
+/* De-emphasize logistics that no longer matter once the job is done, while
+   keeping the client name, charge, and status badge at full legibility. */
+.appt-card-completed .appt-detail-row {
+  color: #45092088;
+}
+
+.appt-card-completed .appt-icon {
+  color: #2f855a99;
 }
 
 .appt-card-loading {

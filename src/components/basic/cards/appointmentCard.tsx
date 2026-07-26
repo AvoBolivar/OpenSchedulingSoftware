@@ -76,7 +76,15 @@ export default function AppointmentCard({ appointment, onClick }: AppointmentCar
           <div className="appt-avatar">{initials}</div>
           <div className="appt-client-info">
             <h3 className="appt-client-name">{client.name}</h3>
-            <span className="appt-charge">{formattedCharge}</span>
+            <div className="appt-meta-row">
+              <span className="appt-charge">{formattedCharge}</span>
+              {isCompleted && (
+                <span className="appt-status-badge">
+                  <CheckCircle2 width={12} height={12} aria-hidden="true" />
+                  Completed
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -100,13 +108,6 @@ export default function AppointmentCard({ appointment, onClick }: AppointmentCar
           </div>
         </div>
       </div>
-
-      {isCompleted && (
-        <span className="appt-completed-badge">
-          <CheckCircle2 width={12} height={12} aria-hidden="true" />
-          Completed
-        </span>
-      )}
 
       {/* Chevron indicator */}
       <ChevronRight className="appt-chevron" width={18} height={18} aria-hidden="true" />
