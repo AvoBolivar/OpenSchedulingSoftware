@@ -1,6 +1,15 @@
-import { useState, useRef, useEffect } from "react"
-import { Clock, ChevronDown } from "lucide-react"
-import "./timePicker.css"
+import { useId, useState } from "react"
+import { Clock } from "lucide-react"
+import { Button } from "../../ui/button"
+import { Label } from "../../ui/label"
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../ui/select"
 
 interface TimePickerProps {
   label: string
@@ -8,122 +17,91 @@ interface TimePickerProps {
   onChange: (value: string) => void
 }
 
-export default function TimePicker({ label, value, onChange }: TimePickerProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const wrapperRef = useRef<HTMLDivElement>(null)
-
-  // Parse the value into parts
-  const parseTime = (str: string) => {
-    const match = str.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i)
-    if (!match) return { hour: 9, minute: 0, period: "AM" as "AM" | "PM" }
-    return {
-      hour: parseInt(match[1], 10),
-      minute: parseInt(match[2], 10),
-      period: match[3].toUpperCase() as "AM" | "PM",
-    }
+function parseTime(str: string) {
+  const match = str.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i)
+  if (!match) return { hour: 9, minute: 0, period: "AM" as "AM" | "PM" }
+  return {
+    hour: parseInt(match[1], 10),
+    minute: parseInt(match[2], 10),
+    period: match[3].toUpperCase() as "AM" | "PM",
   }
+}
 
+const HOURS = Array.from({ length: 12 }, (_, i) => i + 1) // 1-12
+const MINUTES = Array.from({ length: 12 }, (_, i) => i * 5) // 0, 5, ..., 55
+
+export default function TimePicker({ label, value, onChange }: TimePickerProps) {
+  const id = useId()
+  const [open, setOpen] = useState(false)
   const { hour, minute, period } = parseTime(value)
 
   const updateTime = (h: number, m: number, p: "AM" | "PM") => {
     onChange(`${h}:${m.toString().padStart(2, "0")} ${p}`)
   }
 
-  // Close on outside click
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
-        setIsOpen(false)
-      }
-    }
-    if (isOpen) document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [isOpen])
-
-  const hours = Array.from({ length: 12 }, (_, i) => i + 1) // 1-12
-  const minutes = Array.from({ length: 12 }, (_, i) => i * 5) // 0, 5, 10, ..., 55
-
   return (
-    <div className="tp-wrapper" ref={wrapperRef}>
-      <label className="tp-label">{label}</label>
-
-      <button
-        type="button"
-        className={`tp-input ${isOpen ? "open" : ""}`}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <Clock className="tp-clock-icon" width={16} height={16} aria-hidden="true" />
-        <span className="tp-value">
-          {hour}:{minute.toString().padStart(2, "0")} {period}
-        </span>
-        <ChevronDown className={`tp-chevron ${isOpen ? "open" : ""}`} width={16} height={16} />
-      </button>
-
-      {isOpen && (
-        <div className="tp-dropdown">
-          <div className="tp-columns">
-            {/* Hours */}
-            <div className="tp-column">
-              <div className="tp-column-label">Hour</div>
-              <div className="tp-scroll">
-                {hours.map((h) => (
-                  <button
-                    key={h}
-                    type="button"
-                    className={`tp-option ${hour === h ? "selected" : ""}`}
-                    onClick={() => updateTime(h, minute, period)}
-                  >
-                    {h}
-                  </button>
-                ))}
-              </div>
+    <div className="flex flex-col gap-1.5">
+      {label && <Label htmlFor={id}>{label}</Label>}
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button id={id} type="button" variant="outline" className="justify-start font-normal">
+            <Clock width={16} height={16} aria-hidden="true" />
+            {hour}:{minute.toString().padStart(2, "0")} {period}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto">
+          <div className="flex items-end gap-2">
+            <div className="flex flex-col gap-1.5">
+              <span className="text-xs text-muted-foreground">Hour</span>
+              <Select value={String(hour)} onValueChange={(v) => updateTime(Number(v), minute, period)}>
+                <SelectTrigger className="w-16">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {HOURS.map((h) => (
+                    <SelectItem key={h} value={String(h)}>
+                      {h}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-
-            <div className="tp-separator">:</div>
-
-            {/* Minutes */}
-            <div className="tp-column">
-              <div className="tp-column-label">Min</div>
-              <div className="tp-scroll">
-                {minutes.map((m) => (
-                  <button
-                    key={m}
-                    type="button"
-                    className={`tp-option ${minute === m ? "selected" : ""}`}
-                    onClick={() => updateTime(hour, m, period)}
-                  >
-                    {m.toString().padStart(2, "0")}
-                  </button>
-                ))}
-              </div>
+            <div className="flex flex-col gap-1.5">
+              <span className="text-xs text-muted-foreground">Min</span>
+              <Select
+                value={String(minute)}
+                onValueChange={(v) => updateTime(hour, Number(v), period)}
+              >
+                <SelectTrigger className="w-16">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {MINUTES.map((m) => (
+                    <SelectItem key={m} value={String(m)}>
+                      {m.toString().padStart(2, "0")}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-
-            {/* AM/PM */}
-            <div className="tp-column tp-period-column">
-              <div className="tp-column-label">Period</div>
-              <div className="tp-period-toggle">
-                <button
-                  type="button"
-                  className={`tp-period ${period === "AM" ? "selected" : ""}`}
-                  onClick={() => updateTime(hour, minute, "AM")}
-                >
-                  AM
-                </button>
-                <button
-                  type="button"
-                  className={`tp-period ${period === "PM" ? "selected" : ""}`}
-                  onClick={() => updateTime(hour, minute, "PM")}
-                >
-                  PM
-                </button>
-              </div>
+            <div className="flex flex-col gap-1.5">
+              <span className="text-xs text-muted-foreground">Period</span>
+              <Select
+                value={period}
+                onValueChange={(v) => updateTime(hour, minute, v as "AM" | "PM")}
+              >
+                <SelectTrigger className="w-16">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="AM">AM</SelectItem>
+                  <SelectItem value="PM">PM</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-          </div>
-
-          <div className="tp-footer">
-            <button
+            <Button
               type="button"
-              className="tp-now-btn"
+              variant="secondary"
               onClick={() => {
                 const now = new Date()
                 let h = now.getHours()
@@ -134,17 +112,10 @@ export default function TimePicker({ label, value, onChange }: TimePickerProps) 
               }}
             >
               Now
-            </button>
-            <button
-              type="button"
-              className="tp-done-btn"
-              onClick={() => setIsOpen(false)}
-            >
-              Done
-            </button>
+            </Button>
           </div>
-        </div>
-      )}
+        </PopoverContent>
+      </Popover>
     </div>
   )
 }

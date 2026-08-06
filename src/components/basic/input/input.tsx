@@ -1,4 +1,6 @@
-import "./input.css"
+import { useId } from "react"
+import { Input as ShadcnInput } from "../../ui/input"
+import { Label } from "../../ui/label"
 
 interface InputProps {
   label: string
@@ -19,11 +21,13 @@ export default function Input({
   inputMode,
   onEnter,
 }: InputProps) {
+  const id = useId()
+
   return (
-    <div className="input-wrapper">
-      {label && <label className="input-label">{label}</label>}
-      <input
-        className="input-field"
+    <div className="flex flex-col gap-1.5">
+      {label && <Label htmlFor={id}>{label}</Label>}
+      <ShadcnInput
+        id={id}
         type={type}
         inputMode={inputMode}
         placeholder={placeholder}

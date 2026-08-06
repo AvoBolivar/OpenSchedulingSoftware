@@ -1,5 +1,6 @@
-import { Check } from "lucide-react"
-import "./checkbox.css"
+import { useId } from "react"
+import { Checkbox as ShadcnCheckbox } from "../../ui/checkbox"
+import { Label } from "../../ui/label"
 
 interface CheckboxProps {
   label: string
@@ -9,19 +10,17 @@ interface CheckboxProps {
 }
 
 export default function Checkbox({ label, checked, onChange, disabled = false }: CheckboxProps) {
+  const id = useId()
+
   return (
-    <label className={`cb-wrapper ${disabled ? "disabled" : ""}`}>
-      <input
-        type="checkbox"
-        className="cb-native"
+    <div className="flex items-center gap-2">
+      <ShadcnCheckbox
+        id={id}
         checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
+        onCheckedChange={(state) => onChange(state === true)}
         disabled={disabled}
       />
-      <span className={`cb-box ${checked ? "checked" : ""}`}>
-        <Check className="cb-check-icon" width={14} height={14} strokeWidth={3.5} aria-hidden="true" />
-      </span>
-      <span className="cb-label">{label}</span>
-    </label>
+      <Label htmlFor={id}>{label}</Label>
+    </div>
   )
 }
