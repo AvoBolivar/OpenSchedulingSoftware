@@ -25,11 +25,19 @@ file they test, not grouped under any folder above — see [testing.md](testing.
 This is a strict dependency chain:
 
 ```
-definitions → stores / lib → hooks → components/basic → components/<feature> → pages
+definitions → stores / lib → hooks → components/ui → components/basic → components/<feature> → pages
 ```
 
 **Rule:** nothing imports "upward" in this chain (e.g. a store must never import a
 component; `basic/` must never import a feature folder).
+
+**`components/ui/`** is shadcn's CLI-managed output (`npx shadcn add <name>`) — Radix
+primitives + Tailwind + `class-variance-authority`, depending on nothing app-specific
+(not `definitions/`, not `stores/`). Don't hand-edit beyond what the CLI generates; if a
+`ui/` primitive needs app-specific behavior, wrap it in `basic/` (see §2) rather than
+modifying the generated file. Only `basic/`, `components/modal/`, and
+`components/themeProvider/` import from `ui/` directly — feature folders and pages
+always go through `basic/` instead, same as before this existed.
 
 **Note on store access:** the chain shows `hooks` between stores and components, but
 hooks are *optional*, not a mandatory pass-through. Any component (including `basic/`)
@@ -87,8 +95,13 @@ satisfy the chain. Canonical example of direct store access from `basic/`:
   feature's CRUD lifecycle (`appointmentFinished.tsx`, `payHelper.tsx`). Composed by
   whichever feature folder needs them; never composed by `basic/`.
 
-- **`modal/`, `calendar/`** — single generic primitives with exactly one component
-  each, each in their own folder, used across multiple feature folders.
+- **`modal/`, `calendar/`, `themeProvider/`** — single generic primitives with exactly
+  one component each, each in their own folder, used app-wide rather than by one
+  feature. `themeProvider/` additionally splits its Context object into its own
+  `themeContext.ts` file, separate from the `ThemeProvider` component and from
+  `hooks/useTheme.ts` — a file exporting both a component and a non-component (or two
+  components) breaks Vite Fast Refresh, caught by `eslint-plugin-react-refresh`. Follow
+  this split (context/value in its own file) for any future Context provider.
 
 - **`settings/`** — flat folder for app-level settings/utility actions (currently just
   `importExportData.tsx`). Stays flat, one file per action; only split into subfolders

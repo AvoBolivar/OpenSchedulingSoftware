@@ -1,6 +1,6 @@
 import type { Client } from "../../../definitions/client"
 import type { Payment } from "../../../definitions/payments"
-import "./paymentHistoryCard.css"
+import { Card } from "../../ui/card"
 
 interface PaymentHistoryCardProps {
   client: Client
@@ -16,8 +16,8 @@ export default function PaymentHistoryCard({ client, payment, onClick }: Payment
   })
 
   return (
-    <div
-      className="payment-history-card"
+    <Card
+      className="flex-row items-center justify-between gap-3 p-3"
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -28,15 +28,15 @@ export default function PaymentHistoryCard({ client, payment, onClick }: Payment
         }
       }}
     >
-      <div className="payment-history-main">
-        <h3 className="payment-history-name">{client.name}</h3>
-        <p className="payment-history-detail">{payment.method || "—"}</p>
+      <div className="min-w-0 flex-1">
+        <h3 className="truncate text-sm font-medium">{client.name}</h3>
+        <p className="truncate text-xs text-muted-foreground">{payment.method || "—"}</p>
       </div>
 
-      <div className="payment-history-date">
-        <span className="payment-history-date-label">Received</span>
-        <span className="payment-history-date-value">{formattedDate}</span>
+      <div className="flex shrink-0 flex-col items-end">
+        <span className="text-xs text-muted-foreground">Received</span>
+        <span className="text-sm font-medium">{formattedDate}</span>
       </div>
-    </div>
+    </Card>
   )
 }

@@ -1,6 +1,19 @@
-import { useEffect } from "react"
-import { createPortal } from "react-dom"
-import "./modal.css"
+import { X } from "lucide-react"
+import { useMediaQuery } from "../../hooks/useMediaQuery"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog"
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "../ui/drawer"
+import { Button } from "../ui/button"
 
 interface ModalProps {
   isOpen: boolean
@@ -10,49 +23,38 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, title, children }: ModalProps) {
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
-    }
-    if (isOpen) {
-      document.addEventListener("keydown", handleKeyDown)
-      // Lock background scroll while the modal is open
-      const prevOverflow = document.body.style.overflow
-      document.body.style.overflow = "hidden"
-      return () => {
-        document.removeEventListener("keydown", handleKeyDown)
-        document.body.style.overflow = prevOverflow
-      }
-    }
-    return () => document.removeEventListener("keydown", handleKeyDown)
-  }, [isOpen, onClose])
+  const isDesktop = useMediaQuery("(min-width: 560px)")
 
-  if (!isOpen) return null
+  const handleOpenChange = (open: boolean) => {
+    if (!open) onClose()
+  }
 
-  return createPortal(
-    <div className="modal-overlay" onClick={onClose}>
-      <div
-        className="modal"
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-      >
-        <div className="modal-header">
-          <h2 className="modal-title">{title}</h2>
-          <button
-            className="modal-close"
-            onClick={onClose}
-            aria-label="Close"
-          >
-            ✕
-          </button>
-        </div>
-        <div className="modal-body">
+  if (isDesktop) {
+    return (
+      <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+          </DialogHeader>
           {children}
-        </div>
-      </div>
-    </div>,
-    document.body
+        </DialogContent>
+      </Dialog>
+    )
+  }
+
+  return (
+    <Drawer open={isOpen} onOpenChange={handleOpenChange}>
+      <DrawerContent>
+        <DrawerHeader className="flex-row items-center justify-between">
+          <DrawerTitle>{title}</DrawerTitle>
+          <DrawerClose asChild>
+            <Button variant="ghost" size="icon-sm" aria-label="Close">
+              <X aria-hidden="true" />
+            </Button>
+          </DrawerClose>
+        </DrawerHeader>
+        <div className="overflow-y-auto px-4 pb-4">{children}</div>
+      </DrawerContent>
+    </Drawer>
   )
 }
