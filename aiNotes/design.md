@@ -57,6 +57,7 @@ it):
 | Autocomplete | `basic/autocomplete/autocomplete.tsx` | Generic `<T>`-typed searchable select (used for both client picking and payment-method picking). |
 | TimePicker | `basic/time/timePicker.tsx` | Labeled time input, string-valued (`"9:00 AM"` style, not a `Date`). |
 | NavBar | `basic/navbar/navbar.tsx` | The one top-level tab bar; `PageId` union lives here and is the source of truth for nav-bar tabs. |
+| Toast | `basic/toast/toast.tsx` | Fixed-position stack of auto-dismissing (5s) error/status messages; rendered once in `App.tsx`. The only surface `notify()` (see [errorHandling.md](errorHandling.md) §6) renders through — never a per-feature ad-hoc banner. |
 | Cards | `basic/cards/*Card.tsx` | Family of presentational, entity-shaped display cards (`appointmentCard`, `collectionCard`, `financeCard`, `payoutCard`). `clientCard` is **not** here — it moved to `clientsList/` because it needs feature-specific update/delete components; see directoryLogic.md §2 for why that split exists. |
 | Modal | `components/modal/modal.tsx` | Portal-based dialog primitive (Esc-to-close, backdrop click, scroll lock). Not under `basic/` since it's a singleton pattern rather than a family, but is imported by feature folders the same way `basic/` components are. |
 

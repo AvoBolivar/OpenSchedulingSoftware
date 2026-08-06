@@ -90,9 +90,10 @@ satisfy the chain. Canonical example of direct store access from `basic/`:
 - **`modal/`, `calendar/`** — single generic primitives with exactly one component
   each, each in their own folder, used across multiple feature folders.
 
-- **`settings/`** — flat folder for app-level settings/utility actions (currently just
-  `importExportData.tsx`). Stays flat, one file per action; only split into subfolders
-  once it holds 2+ distinct settings features that each need multiple files.
+- **`settings/`** — folder for app-level settings/utility actions, one subfolder per
+  action once an action needs multiple files (`importExportData/`, `googleAccount/` —
+  each `<action>/<action>.tsx` + co-located `.css`/`.test.tsx`), mirroring the
+  `basic/<name>/<name>.tsx` layout. A single-file action may still live flat.
 
 - **Cross-feature imports are not allowed.** Do not import `appointmentsList/*` from
   `clientsList/*` or vice versa. If two feature folders need the same piece of UI:

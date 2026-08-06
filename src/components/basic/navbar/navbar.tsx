@@ -1,6 +1,6 @@
 import "./navbar.css"
 
-export type PageId = "appointments" | "finance" | "clients"
+export type PageId = "appointments" | "finance" | "clients" | "settings"
 
 interface NavBarProps {
   current: PageId
@@ -11,6 +11,7 @@ const NAV_ITEMS: { id: PageId; label: string }[] = [
   { id: "appointments", label: "Appointments" },
   { id: "finance", label: "Finance" },
   { id: "clients", label: "Clients" },
+  { id: "settings", label: "Settings" },
 ]
 
 export default function NavBar({ current, onChange }: NavBarProps) {

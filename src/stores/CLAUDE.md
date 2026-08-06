@@ -13,6 +13,10 @@ All three stores follow the same CRUD shape: `set*` (bulk replace), `create*` (a
   - `getMonthsAppointmentDates(year, month)` — deduped list of `Date`s with an appointment in a given month, used to mark the calendar.
   - `getDayAppointments(date)` — appointments on a given `YYYY-MM-DD` date, sorted by `startTime`.
 
+- **useAccountStore.ts** — Manages the connected backup-provider identity, `Account | null` (`provider`, `email`, `name`, `pictureUrl`). Persist key: `"account"`. Deliberately does **not** store an OAuth token — only the identity a user last consented as; `lib/backupProviders/googleDriveProvider.ts` requests a fresh access token per backup/restore action instead. No derived selectors, just `setAccount`/`clearAccount`.
+
+- **useNotificationStore.ts** — Not persisted (ephemeral UI state, like `useAppointmentStore`'s `selectedDay`). Manages the toast queue: `push(message)` (called by `lib/notify.ts`), `dismiss(id)`. Rendered by `components/basic/toast/toast.tsx`.
+
 - **usePaymentStore.ts** — Manages `Payment[]`, the most complex store since payments are meaningless without their related `Appointment` and `Client`. State: `payments`, `selectedPaymentID`. Persist key: `"payments"`. Cross-store reads: pulls `appointments` from `useAppointmentStore` and `clients` from `useClientStore` (via `getState()`, not hooks) to join records into a `Collection { client, appointment }` shape (or, for received payments, a `ReceivedPayment { client, payment }` shape — see `getReceivedPayments()`). Derived selectors:
   - `getPaymentsOwed()` / `getPaymentsToPayout()` — collections where `paymentReceived` / `expensesPaid` is false, joined with client + appointment.
   - `getReceivedPayments()` — payments where `paymentReceived` is true, joined with client, sorted by parsed `payment.date` descending (most recent first).

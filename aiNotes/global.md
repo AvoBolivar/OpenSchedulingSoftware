@@ -29,11 +29,16 @@ person's cleaning business, not a multi-tenant product.
 - **PWA is installed but not wired up.** `vite-plugin-pwa` is a dependency, but
   `vite.config.ts` doesn't include it in `plugins` and there is no manifest yet. Don't
   assume installability, offline support, or a service worker exist today.
-- **No backend, no auth, no multi-user.** All data lives in `localStorage` via
-  Zustand's `persist` middleware (see [stores/CLAUDE.md](../src/stores/CLAUDE.md)).
-  There is no account/session concept anywhere in the data model, and
-  [errorHandling.md](errorHandling.md) §1 exists partly because there's no server to
-  hand fallibility to — this app owns every failure mode itself.
+- **No custom backend; single-user.** All data lives in `localStorage` via Zustand's
+  `persist` middleware (see [stores/CLAUDE.md](../src/stores/CLAUDE.md)). The one
+  exception is the optional Google Drive backup: signing in with Google (via Google
+  Identity Services, `src/lib/backupProviders/googleDriveProvider.ts`) *is* the
+  account layer — there's no custom user database, password, or session, and Drive
+  access rides the same OAuth consent as the sign-in. This is still not multi-tenant:
+  one person, one Google account, backing up their own data to their own Drive.
+  [errorHandling.md](errorHandling.md) §1 exists partly because there's still no
+  server of ours to hand fallibility to — this app owns every failure mode itself,
+  including Drive/network failures now that those exist.
 
 ## 2. Map of the context system
 

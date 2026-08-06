@@ -4,6 +4,7 @@ import NavBar from "../components/basic/navbar/navbar"
 import AppointmentsPage from "./appointmentsPage"
 import FinancePage from "./financePage"
 import ClientsPage from "./clientsPage"
+import SettingsPage from "./settingsPage"
 
 export default function Home() {
   const [page, setPage] = useState<PageId>("appointments")
@@ -37,6 +38,7 @@ export default function Home() {
         {page === "appointments" && <AppointmentsPage />}
         {page === "finance" && <FinancePage />}
         {page === "clients" && <ClientsPage />}
+        {page === "settings" && <SettingsPage />}
       </main>
     </div>
   )
