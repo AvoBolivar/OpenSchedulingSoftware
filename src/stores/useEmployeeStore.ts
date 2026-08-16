@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Employee } from '../definitions/employee'
+import { useAppointmentStore } from './useAppointmentStore'
+import { type Result, ok, err } from '../lib/result'
 
 type NewEmployee = Omit<Employee, 'id'>
 
@@ -14,7 +16,7 @@ interface EmployeeState {
   createEmployee: (data: NewEmployee) => void
   getEmployee: (id: string) => Employee | undefined
   updateEmployee: (id: string, patch: Partial<NewEmployee>) => void
-  deleteEmployee: (id: string) => void
+  deleteEmployee: (id: string) => Result<void>
 }
 
 export const useEmployeeStore = create<EmployeeState>()(
@@ -40,13 +42,24 @@ export const useEmployeeStore = create<EmployeeState>()(
           ),
         })),
 
-      // TODO(appointmentScopeGrowth Step 2.1): block delete if referenced by an appointment
-      deleteEmployee: (id) =>
+      deleteEmployee: (id) => {
+        const isReferenced = useAppointmentStore
+          .getState()
+          .appointments.some((a) => a.employeeIDs.includes(id))
+        if (isReferenced) {
+          return err({
+            kind: 'conflict',
+            message: 'This employee is still assigned to an appointment. Remove them from all appointments before deleting.',
+          })
+        }
+
         set((state) => ({
           employees: state.employees.filter((e) => e.id !== id),
           selectedEmployeeID:
             state.selectedEmployeeID === id ? null : state.selectedEmployeeID,
-        })),
+        }))
+        return ok(undefined)
+      },
     }),
     { name: 'employees' }
   )

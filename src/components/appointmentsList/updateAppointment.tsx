@@ -1,8 +1,10 @@
 import { useState } from "react";
 import type { Appointment } from "../../definitions/appointments";
 import type { Client } from "../../definitions/client";
+import type { Job } from "../../definitions/job";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";
 import { useClientStore } from "../../stores/useClientStore";
+import { useJobStore } from "../../stores/useJobStore";
 import { usePaymentStore } from "../../stores/usePaymentStore";
 import { toDateKey, fromDateKey } from "../../lib/date";
 import Modal from "../modal/modal";
@@ -57,14 +59,21 @@ function UpdateAppointmentForm({
   const updateApt = useAppointmentStore((s) => s.updateAppointment);
   const deleteApt = useAppointmentStore((s) => s.deleteAppointment);
   const createPayment = usePaymentStore((s) => s.createPayment);
+  const getJob = useJobStore((s) => s.getJob);
 
   // updating the appointment
+  const [name, setName] = useState<string>(appointment.name);
   const [selectedDate, setSelectedDate] = useState<Date>(fromDateKey(appointment.date));
   const [selectedClient, setSelectedClient] = useState<Client | null>(client);
   const [startTime, setStartTime] = useState<string>(appointment.startTime);
   const [endTime, setEndTime] = useState<string>(appointment.endTime);
   const [rate, setRate] = useState<string>(String(appointment.charge));
   const [expense, setExpense] = useState<string>(String(appointment.expense));
+  const [categoryIDs, setCategoryIDs] = useState<string[]>(appointment.categoryIDs);
+  const [employeeIDs, setEmployeeIDs] = useState<string[]>(appointment.employeeIDs);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(
+    appointment.jobID ? (getJob(appointment.jobID) ?? null) : null
+  );
 
   // completing job
   const [jobFinished, setJobFinished] = useState<boolean>(false);
@@ -74,12 +83,16 @@ function UpdateAppointmentForm({
   const [componentDisplayed, setComponentDisplayed] = useState<string>("Update");
 
   function resetForm() {
+    setName(appointment.name);
     setSelectedDate(fromDateKey(appointment.date));
     setSelectedClient(client);
     setStartTime(appointment.startTime);
     setEndTime(appointment.endTime);
     setRate(String(appointment.charge));
     setExpense(String(appointment.expense));
+    setCategoryIDs(appointment.categoryIDs);
+    setEmployeeIDs(appointment.employeeIDs);
+    setSelectedJob(appointment.jobID ? (getJob(appointment.jobID) ?? null) : null);
   }
 
   function handleClose() {
@@ -101,6 +114,10 @@ function UpdateAppointmentForm({
       endTime,
       expense: Number(expense),
       show: showOverride ?? appointment.show,
+      name,
+      categoryIDs,
+      employeeIDs,
+      jobID: selectedJob?.id ?? null,
     });
     setIsModalOpen(false);
   }
@@ -128,6 +145,8 @@ function UpdateAppointmentForm({
         {componentDisplayed === "Update" ? (
           <>
             <AppointmentInfo
+              name={name}
+              setName={setName}
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               selectedClient={selectedClient}
@@ -140,6 +159,12 @@ function UpdateAppointmentForm({
               setRate={setRate}
               expense={expense}
               setExpense={setExpense}
+              categoryIDs={categoryIDs}
+              setCategoryIDs={setCategoryIDs}
+              employeeIDs={employeeIDs}
+              setEmployeeIDs={setEmployeeIDs}
+              selectedJob={selectedJob}
+              setSelectedJob={setSelectedJob}
             />
             {/* Added md:col-span-2 here */}
             <div className="mt-3 flex flex-col justify-end gap-2.5 md:col-span-2">

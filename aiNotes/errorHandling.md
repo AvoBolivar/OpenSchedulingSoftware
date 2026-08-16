@@ -210,10 +210,19 @@ lands, move those bullets up to "enforced" and shrink the prose to rationale.
 - `notify()`: [`lib/notify.ts`](../src/lib/notify.ts) +
   [`stores/useNotificationStore.ts`](../src/stores/useNotificationStore.ts) +
   [`basic/toast/toast.tsx`](../src/components/basic/toast/toast.tsx).
+- First store action returning `conflict`:
+  [`stores/useCategoryStore.ts`](../src/stores/useCategoryStore.ts)'s `deleteCategory`
+  (refuses when an appointment's `categoryIDs` still references it), alongside the same
+  pattern in [`stores/useEmployeeStore.ts`](../src/stores/useEmployeeStore.ts)'s
+  `deleteEmployee` and [`stores/useJobStore.ts`](../src/stores/useJobStore.ts)'s
+  `deleteJob` — all three check `useAppointmentStore.getState().appointments` for a
+  reference before deleting. Call sites
+  ([`categoriesList/deleteCategory.tsx`](../src/components/categoriesList/deleteCategory.tsx)
+  and its `employeesList`/`jobsList` counterparts) follow §2's exact branch: on `!ok`,
+  `console.error` + `notify()` + `return` (leaving the confirmation modal open).
 
 Still none yet — first implementations become canonical and must be linked here when
 written:
-- first store action returning `conflict`
 - first form doing inline validation
 - `basic/errorFallback/` (§4's render-crash boundary)
 

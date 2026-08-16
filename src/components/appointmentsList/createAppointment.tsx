@@ -4,6 +4,7 @@ import AppointmentInfo from "./appointmentInfo";
 import type { RepeatOption } from "./appointmentInfo";
 import Modal from "../modal/modal";
 import type { Client } from "../../definitions/client";
+import type { Job } from "../../definitions/job";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";
 import { toDateKey, generateRecurringDates } from "../../lib/date";
 
@@ -11,12 +12,16 @@ export default function CreateAppointment() {
   const createAppointment = useAppointmentStore((s) => s.createAppointment);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [name, setName] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [startTime, setStartTime] = useState<string>("9:00 AM");
   const [endTime, setEndTime] = useState<string>("10:00 AM");
   const [expense, setExpense] = useState<string>("0");
   const [rate, setRate] = useState<string>("0");
+  const [categoryIDs, setCategoryIDs] = useState<string[]>([]);
+  const [employeeIDs, setEmployeeIDs] = useState<string[]>([]);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [repeatOption, setRepeatOption] = useState<RepeatOption>("none");
   const [repeatEndDate, setRepeatEndDate] = useState<Date | null>(null);
 
@@ -42,12 +47,16 @@ export default function CreateAppointment() {
   }
 
   function resetForm() {
+    setName("");
     setSelectedDate(new Date());
     setSelectedClient(null);
     setStartTime("9:00 AM");
     setEndTime("10:00 AM");
     setRate("0");
     setExpense("0");
+    setCategoryIDs([]);
+    setEmployeeIDs([]);
+    setSelectedJob(null);
     setRepeatOption("none");
     setRepeatEndDate(null);
   }
@@ -64,6 +73,10 @@ export default function CreateAppointment() {
         date: toDateKey(date),
         expense: Number(expense),
         show: true,
+        name,
+        categoryIDs,
+        employeeIDs,
+        jobID: selectedJob?.id ?? null,
       });
     }
 
@@ -85,6 +98,8 @@ export default function CreateAppointment() {
       >
         <div className="mx-auto flex max-w-[800px] flex-col gap-6 px-1 py-2 md:grid-cols-[1.2fr_1fr] md:items-start">
           <AppointmentInfo
+            name={name}
+            setName={setName}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
             selectedClient={selectedClient}
@@ -97,6 +112,12 @@ export default function CreateAppointment() {
             setRate={setRate}
             expense={expense}
             setExpense={setExpense}
+            categoryIDs={categoryIDs}
+            setCategoryIDs={setCategoryIDs}
+            employeeIDs={employeeIDs}
+            setEmployeeIDs={setEmployeeIDs}
+            selectedJob={selectedJob}
+            setSelectedJob={setSelectedJob}
             repeatOption={repeatOption}
             onRepeatOptionChange={setRepeatOption}
             repeatEndDate={repeatEndDate}
