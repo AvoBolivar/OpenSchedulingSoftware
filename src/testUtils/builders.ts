@@ -1,6 +1,9 @@
 import type { Client } from '../definitions/client'
+import type { Employee } from '../definitions/employee'
 import type { Appointment } from '../definitions/appointments'
 import type { Payment } from '../definitions/payments'
+import type { Job } from '../definitions/job'
+import type { Category } from '../definitions/category'
 
 let counter = 0
 function nextId(prefix: string): string {
@@ -24,6 +27,17 @@ export function buildClient(overrides: Partial<Client> = {}): Client {
   }
 }
 
+export function buildEmployee(overrides: Partial<Employee> = {}): Employee {
+  return {
+    id: nextId('employee'),
+    name: 'Test Employee',
+    phoneNumber: '000-000-0000',
+    notes: [],
+    active: true,
+    ...overrides,
+  }
+}
+
 export function buildAppointment(overrides: Partial<Appointment> = {}): Appointment {
   return {
     id: nextId('appointment'),
@@ -38,6 +52,14 @@ export function buildAppointment(overrides: Partial<Appointment> = {}): Appointm
   }
 }
 
+export function buildCategory(overrides: Partial<Category> = {}): Category {
+  return {
+    id: nextId('category'),
+    name: 'Test Category',
+    ...overrides,
+  }
+}
+
 export function buildPayment(overrides: Partial<Payment> = {}): Payment {
   return {
     id: nextId('payment'),
@@ -46,6 +68,18 @@ export function buildPayment(overrides: Partial<Payment> = {}): Payment {
     paymentReceived: false,
     expensesPaid: false,
     appointmentID: nextId('appointment'),
+    ...overrides,
+  }
+}
+
+export function buildJob(overrides: Partial<Job> = {}): Job {
+  return {
+    id: nextId('job'),
+    clientID: nextId('client'),
+    name: 'Test Job',
+    description: 'A test job',
+    status: 'active',
+    createdDate: '2026-01-01',
     ...overrides,
   }
 }

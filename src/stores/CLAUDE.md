@@ -8,6 +8,8 @@ All three stores follow the same CRUD shape: `set*` (bulk replace), `create*` (a
 
 - **useClientStore.ts** — Manages `Client[]` (see [Client](../definitions/CLAUDE.md)). State: `clients`, `selectedClientID`. Persist key: `"clients"`. Simplest of the three stores — no derived/computed selectors, just CRUD plus a `selectedClientID` for UI selection state.
 
+- **useEmployeeStore.ts** — Manages `Employee[]` (see [Employee](../definitions/CLAUDE.md)). State: `employees`, `selectedEmployeeID`. Persist key: `"employees"`. Same shape as `useClientStore.ts` — plain CRUD, no derived selectors yet. `deleteEmployee` is currently unconditional; a `TODO(appointmentScopeGrowth Step 2.1)` marks where a referenced-by-appointment guard needs to go once appointments can reference employees.
+
 - **useAppointmentStore.ts** — Manages `Appointment[]`. State: `appointments`, `selectedAppointmentID`, `selectedDay` (a `Date`, used to drive the calendar view — not persisted, since `partialize` restricts persistence to `appointments` only). Persist key: `"appointments"`. Extra selectors beyond CRUD:
   - `getFutureAppointments()` — appointments from today onward, sorted by date.
   - `getMonthsAppointmentDates(year, month)` — deduped list of `Date`s with an appointment in a given month, used to mark the calendar.
@@ -16,6 +18,8 @@ All three stores follow the same CRUD shape: `set*` (bulk replace), `create*` (a
 - **useAccountStore.ts** — Manages the connected backup-provider identity, `Account | null` (`provider`, `email`, `name`, `pictureUrl`). Persist key: `"account"`. Deliberately does **not** store an OAuth token — only the identity a user last consented as; `lib/backupProviders/googleDriveProvider.ts` requests a fresh access token per backup/restore action instead. No derived selectors, just `setAccount`/`clearAccount`.
 
 - **useNotificationStore.ts** — Not persisted (ephemeral UI state, like `useAppointmentStore`'s `selectedDay`). Manages the toast queue: `push(message)` (called by `lib/notify.ts`), `dismiss(id)`. Rendered by `components/basic/toast/toast.tsx`.
+
+- **useCategoryStore.ts** — Manages `Category[]` (see [Category](../definitions/CLAUDE.md)). State: `categories`. Persist key: `"categories"`. Same shape as `useClientStore.ts` — no derived selectors.
 
 - **usePaymentStore.ts** — Manages `Payment[]`, the most complex store since payments are meaningless without their related `Appointment` and `Client`. State: `payments`, `selectedPaymentID`. Persist key: `"payments"`. Cross-store reads: pulls `appointments` from `useAppointmentStore` and `clients` from `useClientStore` (via `getState()`, not hooks) to join records into a `Collection { client, appointment }` shape (or, for received payments, a `ReceivedPayment { client, payment }` shape — see `getReceivedPayments()`). Derived selectors:
   - `getPaymentsOwed()` / `getPaymentsToPayout()` — collections where `paymentReceived` / `expensesPaid` is false, joined with client + appointment.
@@ -26,6 +30,8 @@ All three stores follow the same CRUD shape: `set*` (bulk replace), `create*` (a
   - `getTotalCollected()` — all-time sum of `charge` across all received payments (`totalReceivedSince` with an unbounded `since`).
   - `getTotalNetAfterPayouts()` — `getTotalCollected()` minus the sum of `expense` across payments where `expensesPaid` is true (independent of `paymentReceived`, matching `getTotalNeededToPayOut()`'s filter shape).
   - `payHelper(appointmentID)` — marks a payment's `expensesPaid` true by matching `appointmentID` (note: doesn't touch `paymentReceived`).
+
+- **useJobStore.ts** — Manages `Job[]` (see [Job](../definitions/CLAUDE.md)). State: `jobs`, `selectedJobID`. Persist key: `"jobs"`. Same CRUD shape as `useClientStore.ts`, no derived selectors yet. `deleteJob` is currently unconditional — see the `TODO(appointmentScopeGrowth Step 2.1)` comment in the file for the planned guard once `Appointment.jobID` exists.
 
 ## Gotchas
 

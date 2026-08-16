@@ -5,6 +5,8 @@ import ThemeToggle from "../components/basic/themeToggle/themeToggle"
 import AppointmentsPage from "./appointmentsPage"
 import FinancePage from "./financePage"
 import ClientsPage from "./clientsPage"
+import EmployeesPage from "./employeesPage"
+import JobsPage from "./jobsPage"
 import SettingsPage from "./settingsPage"
 
 export default function Home() {
@@ -21,6 +23,8 @@ export default function Home() {
         {page === "appointments" && <AppointmentsPage />}
         {page === "finance" && <FinancePage />}
         {page === "clients" && <ClientsPage />}
+        {page === "employees" && <EmployeesPage />}
+        {page === "jobs" && <JobsPage />}
         {page === "settings" && <SettingsPage />}
       </main>
     </div>

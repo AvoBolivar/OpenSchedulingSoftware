@@ -124,9 +124,9 @@ function UpdateAppointmentForm({
 
   return (
     <Modal isOpen={isModalOpen} onClose={handleClose} title="Edit Appointment">
-      <div className="mx-auto flex max-w-[800px] flex-col gap-6 px-1 py-2 md:grid md:grid-cols-[1.2fr_1fr] md:items-start">
+      <div className="mx-auto max-w-[900px] w-full grid grid-cols-1 gap-6 px-1 py-2">
         {componentDisplayed === "Update" ? (
-          <div>
+          <>
             <AppointmentInfo
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
@@ -141,7 +141,8 @@ function UpdateAppointmentForm({
               expense={expense}
               setExpense={setExpense}
             />
-            <div className="mt-3 flex flex-col justify-end gap-2.5">
+            {/* Added md:col-span-2 here */}
+            <div className="mt-3 flex flex-col justify-end gap-2.5 md:col-span-2">
               <Button label="Update Appointment" onClick={() => updateAppointment()} />
               <Button label="Delete Appointment" onClick={deleteAppointment} />
               {appointment.show ? (
@@ -150,9 +151,9 @@ function UpdateAppointmentForm({
                 <Button label="Mark as Not Done" onClick={() => updateAppointment(true)} />
               )}
             </div>
-          </div>
+          </>
         ) : (
-          <div>
+          <>
             <AppointmentFinished
               jobFinished={jobFinished}
               setJobFinished={setJobFinished}
@@ -161,11 +162,12 @@ function UpdateAppointmentForm({
               helperPaid={helperPaid}
               setHelperPaid={setHelperPaid}
             />
-            <div className="mt-3 flex flex-col justify-end gap-2.5">
+            {/* Added md:col-span-2 here */}
+            <div className="mt-3 flex flex-col justify-end gap-2.5 md:col-span-2">
               <Button label="Done" onClick={handleSubmit} />
               <Button label="Back" onClick={() => setComponentDisplayed("Update")} />
             </div>
-          </div>
+          </>
         )}
       </div>
     </Modal>

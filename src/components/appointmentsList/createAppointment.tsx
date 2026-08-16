@@ -83,7 +83,7 @@ export default function CreateAppointment() {
         onClose={() => setIsModalOpen(false)}
         title="Create Appointment"
       >
-        <div className="mx-auto flex max-w-[800px] flex-col gap-6 px-1 py-2 md:grid md:grid-cols-[1.2fr_1fr] md:items-start">
+        <div className="mx-auto flex max-w-[800px] flex-col gap-6 px-1 py-2 md:grid-cols-[1.2fr_1fr] md:items-start">
           <AppointmentInfo
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
