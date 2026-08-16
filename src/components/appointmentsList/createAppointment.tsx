@@ -7,8 +7,6 @@ import type { Client } from "../../definitions/client";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";
 import { toDateKey, generateRecurringDates } from "../../lib/date";
 
-import "./createAppointment.css";
-
 export default function CreateAppointment() {
   const createAppointment = useAppointmentStore((s) => s.createAppointment);
 
@@ -85,7 +83,7 @@ export default function CreateAppointment() {
         onClose={() => setIsModalOpen(false)}
         title="Create Appointment"
       >
-        <div className="appointment-modal-layout">
+        <div className="mx-auto flex max-w-[800px] flex-col gap-6 px-1 py-2 md:grid md:grid-cols-[1.2fr_1fr] md:items-start">
           <AppointmentInfo
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
@@ -104,9 +102,9 @@ export default function CreateAppointment() {
             repeatEndDate={repeatEndDate}
             onRepeatEndDateChange={setRepeatEndDate}
           />
-          <div className="appt-form-actions">
+          <div className="mt-3 flex flex-col justify-end gap-2.5">
             {isRepeating && (
-              <span className="repeat-summary">
+              <span className="text-center text-[13px] text-primary">
                 {repeatEndDateInvalid
                   ? "Pick an end date on or after the start date."
                   : `This will create ${occurrenceDates.length} appointment${occurrenceDates.length === 1 ? "" : "s"}.`}

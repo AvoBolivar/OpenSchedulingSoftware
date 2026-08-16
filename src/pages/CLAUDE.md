@@ -19,6 +19,7 @@ Top-level route/page components, one per tab in the app's nav bar, plus the shar
 - **settingsPage.tsx**
   - Functional Purpose: Hosts `GoogleAccount` (connect/backup/restore/disconnect Google Drive), `ImportExportData` (local JSON export/import), and the "Delete Data" action — moved here from `appointmentsPage.tsx`.
   - Contextual Purpose: The account/data-management tab — anything about where the user's data lives or how it's backed up, not about a specific client/appointment/payment.
-- **pages.css** 
-  - Functional Purpose: Shared layout/styling for all four page views (`.page`, `.page__header`, `.section`, `.panel`, `.finance-grid`, `.button-section`, responsive breakpoints).
-  - Contextual Purpose: This contains the styling for each page.
+
+Each page is styled inline with Tailwind utility classes directly in its `.tsx` file —
+there is no shared `pages.css`; the four pages repeat the same layout utility strings
+(max-width container, header, `mt-6 sm:mt-7` sections) rather than sharing a class.

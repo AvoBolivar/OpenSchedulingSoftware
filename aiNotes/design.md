@@ -11,9 +11,21 @@ v4 + `class-variance-authority`), styled via CSS custom properties that switch p
 `data-theme` attribute on `<html>`, with a modern sans-serif typeface (Geist).** There is
 no more hand-authored component CSS and no more hardcoded hex — every color is a
 semantic token (`bg-primary`, `text-muted-foreground`, etc.) that resolves differently
-per theme. This replaced the app's original single hand-authored rose/burgundy palette
-on Georgia serif; see §0 for how that identity was preserved as one of four selectable
-themes.
+per theme, and every component's markup is styled with Tailwind utility classes directly
+in the `.tsx` file. This replaced the app's original single hand-authored rose/burgundy
+palette on Georgia serif; see §0 for how that identity was preserved as one of four
+selectable themes.
+
+One documented exception: `components/calendar/calendar.tsx` (a `react-calendar` wrapper)
+renders fixed vendor BEM class names (`.react-calendar__tile`, etc.) that can't take a
+per-element Tailwind `className`. Tailwind's arbitrary-variant `_`→space conversion
+collides with the literal double underscores in those class names (confirmed: even
+`\_`-escaping still collapses to a space when Tailwind builds the descendant selector),
+so that one component is themed via a `@layer components` block in `src/index.css` using
+`@apply` with the same tokens/utilities instead of arbitrary-variant selectors in the
+component. It's still 100% token-driven, no raw hex — just not inline-in-JSX. See the
+"react-calendar" comment block in `index.css` before adding a similar vendor-component
+override elsewhere.
 
 ## 0. Theming: tokens, presets, and the toggle
 
@@ -69,8 +81,9 @@ anymore.
 | Primitive | Path | Built from | Notes |
 |---|---|---|---|
 | Button | `basic/button/button.tsx` | `ui/button` | `variant: "primary" \| "secondary" \| "danger"` (default `primary`) maps internally to shadcn's `default`/`secondary`/`destructive`. Accepts an optional `className` (forwarded to `ui/button`) for one-off layout needs like `w-full`/`flex-1` — still the **only** button implementation, never write a raw `<button>` styled ad hoc. |
-| Input | `basic/input/input.tsx` | `ui/input` + `ui/label` | Labeled text input, `inputMode` for numeric/tel/email keyboards on mobile. |
+| Input | `basic/input/input.tsx` | `ui/input` + `ui/label`, or `ui/input-group` when `prefix` is set | Labeled text input, `inputMode` for numeric/tel/email keyboards on mobile. Optional `prefix` (e.g. `"$"`) switches internally to `ui/input-group` for a leading glyph — only opt in when a field genuinely needs one (currency, etc). |
 | Checkbox | `basic/checkbox/checkbox.tsx` | `ui/checkbox` + `ui/label` | Radix-backed, keyboard/screen-reader accessible natively (no more hand-rolled focus-ring CSS). |
+| Switch | `basic/switch/switch.tsx` | `ui/switch` + `ui/label` | Labeled toggle row (`label` + optional `description` + `checked`/`onChange`), renders its own row layout unlike `Checkbox`. Use for a single on/off setting with explanatory text (e.g. client active/inactive); use `Checkbox` for a plain list-item toggle. |
 | Autocomplete | `basic/autocomplete/autocomplete.tsx` | `ui/popover` + `ui/command` | Generic `<T>`-typed searchable select (used for both client picking and payment-method picking). Click-to-open trigger button showing the current selection, per shadcn's combobox pattern — no longer a live-typing-always-visible field (was `downshift`-based before). |
 | TimePicker | `basic/time/timePicker.tsx` | `ui/popover` + `ui/select` ×3 | Labeled time input, string-valued (`"9:00 AM"` style, not a `Date`). Hour/minute/AM-PM as three `Select`s plus a "Now" button, replacing the old hand-rolled scroll-column dropdown. |
 | NavBar | `basic/navbar/navbar.tsx` | `ui/tabs` | The one top-level tab bar; `PageId` union lives here and is the source of truth for nav-bar tabs. |
@@ -104,7 +117,7 @@ Icons currently in use, as a reference set (not an allow-list — pull any other
 `lucide-react` icon as needed, matching the conventions above):
 `Check`, `CheckCircle2`, `ChevronDown`, `ChevronsUpDown`, `ChevronLeft`, `ChevronRight`,
 `Clock`, `Calendar`, `ChartLine`, `Users`, `MapPin`, `Phone`, `FileText`, `Trash2`,
-`UserCheck`, `SquareCheckBig`, `CreditCard`, `Palette`, `X`.
+`UserCheck`, `SquareCheckBig`, `CreditCard`, `Palette`, `Plus`, `X`.
 
 ## 3. Themed-variant component pattern
 
@@ -133,6 +146,9 @@ Not yet enforced (caught only by re-reading this file):
 - a raw `<button>`/`<input>` styled ad hoc instead of reusing `basic/` or `ui/`
 - an icon from a different package, or an icon missing `aria-hidden`
 - a `.dark` block or a fifth theme preset added without updating §0's table
+- a new `@layer components` override added to `index.css` for something that isn't a
+  vendor component with fixed class names (the react-calendar exception above is meant
+  to stay singular — check the primitives table in §1 first)
 
 Previous next-step ("extract the palette into CSS custom properties so a rebrand or
 theme pass is a one-file change") is **done** — that's exactly what this migration did.
@@ -146,3 +162,4 @@ fails `npm run lint` instead of waiting for review.
 - ColorScheme-driven `basic/` component: [basic/cards/financeCard.tsx](../src/components/basic/cards/financeCard.tsx)
 - Responsive Dialog/Drawer composition: [components/modal/modal.tsx](../src/components/modal/modal.tsx)
 - Theme system end to end: [components/themeProvider/](../src/components/themeProvider/), [hooks/useTheme.ts](../src/hooks/useTheme.ts), [basic/themeToggle/themeToggle.tsx](../src/components/basic/themeToggle/themeToggle.tsx), token definitions in [../src/index.css](../src/index.css)
+- Vendor-component theming exception (`@apply` in `index.css` instead of inline Tailwind): [components/calendar/calendar.tsx](../src/components/calendar/calendar.tsx) + the "react-calendar" `@layer components` block in [../src/index.css](../src/index.css)

@@ -7,9 +7,9 @@ import { usePaymentStore } from "../../stores/usePaymentStore";
 import { fromDateKey } from "../../lib/date";
 import Modal from "../modal/modal";
 import Button from "../basic/button/button";
+import Input from "../basic/input/input";
 import Autocomplete from "../basic/autocomplete/autocomplete";
 import Checkbox from "../basic/checkbox/checkbox";
-import "./updateCollection.css";
 
 interface UpdateCollectionProps {
   isModalOpen: boolean;
@@ -91,25 +91,25 @@ export default function UpdateCollection({
 
   return (
     <Modal isOpen={isModalOpen} onClose={handleClose} title="Collection">
-      <div className="uc-layout">
+      <div className="flex flex-col gap-4">
         {/* Client header */}
-        <div className="uc-client">
-          <div className="uc-avatar">{initials}</div>
-          <div className="uc-client-info">
-            <h3 className="uc-client-name">{client.name}</h3>
-            <p className="uc-client-detail">{client.phoneNumber}</p>
-            <p className="uc-client-detail">{client.address}</p>
+        <div className="flex items-center gap-3 rounded-[10px] bg-primary/10 p-3.5">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold tracking-wide text-primary-foreground shadow-sm">{initials}</div>
+          <div className="min-w-0 flex-1">
+            <h3 className="m-0 mb-1 text-base font-bold text-foreground">{client.name}</h3>
+            <p className="m-0 text-[13px] leading-snug text-muted-foreground">{client.phoneNumber}</p>
+            <p className="m-0 text-[13px] leading-snug text-muted-foreground">{client.address}</p>
           </div>
         </div>
 
         {/* Appointment summary */}
-        <div className="uc-appointment">
-          <div className="uc-appointment-row">
-            <Calendar className="uc-icon" width={14} height={14} aria-hidden="true" />
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2 text-[13px] text-foreground">
+            <Calendar className="shrink-0 text-primary" width={14} height={14} aria-hidden="true" />
             <span>{formattedDate}</span>
           </div>
-          <div className="uc-appointment-row">
-            <Clock className="uc-icon" width={14} height={14} aria-hidden="true" />
+          <div className="flex items-center gap-2 text-[13px] text-foreground">
+            <Clock className="shrink-0 text-primary" width={14} height={14} aria-hidden="true" />
             <span>
               {appointment.startTime} – {appointment.endTime}
             </span>
@@ -117,24 +117,17 @@ export default function UpdateCollection({
         </div>
 
         {/* Divider */}
-        <div className="uc-divider" />
+        <div className="my-1 h-px bg-border" />
 
         {/* Form fields */}
-        <div className="uc-field">
-          <label className="uc-label">Rate</label>
-          <div className="uc-input-wrapper">
-            <span className="uc-currency-prefix">$</span>
-            <input
-              type="number"
-              className="uc-input"
-              value={rate}
-              onChange={(e) => setRate(e.target.value)}
-              placeholder="0.00"
-              min="0"
-              step="0.01"
-            />
-          </div>
-        </div>
+        <Input
+          label="Rate"
+          type="number"
+          prefix="$"
+          placeholder="0.00"
+          value={rate}
+          onChange={setRate}
+        />
 
         <Autocomplete<string>
           label="Payment method"
@@ -145,7 +138,7 @@ export default function UpdateCollection({
           onSelectedItemChange={(item) => setMethod(item)}
         />
 
-        <div className="uc-checkbox-wrapper">
+        <div className="rounded-lg bg-primary/10 px-3.5 py-3">
           <Checkbox
             label="Payment received"
             checked={paymentReceived}
@@ -154,22 +147,20 @@ export default function UpdateCollection({
         </div>
 
         {/* Actions */}
-        <div className="uc-actions">
-          <div className="uc-actions">
+        <div className="mt-2 flex items-center justify-between gap-2 border-t border-border pt-4">
+          <Button
+            label="Delete"
+            variant="danger"
+            onClick={handleDelete}
+            icon={<Trash2 width={14} height={14} />}
+          />
+          <div className="flex gap-2">
             <Button
-              label="Delete"
-              variant="danger"
-              onClick={handleDelete}
-              icon={<Trash2 width={14} height={14} />}
+              label="Cancel"
+              variant="secondary"
+              onClick={handleClose}
             />
-            <div className="uc-actions-right">
-              <Button
-                label="Cancel"
-                variant="secondary"
-                onClick={handleClose}
-              />
-              <Button label="Save" variant="primary" onClick={handleSave} />
-            </div>
+            <Button label="Save" variant="primary" onClick={handleSave} />
           </div>
         </div>
       </div>
