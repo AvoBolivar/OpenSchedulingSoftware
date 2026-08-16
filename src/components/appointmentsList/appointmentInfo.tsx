@@ -1,15 +1,23 @@
 import ThemedCalendar from "../calendar/calendar";
 import Input from "../basic/input/input";
 import Autocomplete from "../basic/autocomplete/autocomplete";
+import Checkbox from "../basic/checkbox/checkbox";
 import TimePicker from "../basic/time/timePicker";
 import { useClientStore } from "../../stores/useClientStore";
+import { useCategoryStore } from "../../stores/useCategoryStore";
+import { useEmployeeStore } from "../../stores/useEmployeeStore";
+import { useJobStore } from "../../stores/useJobStore";
 import type { Client } from "../../definitions/client";
+import type { Job } from "../../definitions/job";
 import type { RecurrenceFrequency } from "../../lib/date";
 import { cn } from "../../lib/utils";
+import ManageCategories from "../settings/manageCategories/manageCategories";
 
 export type RepeatOption = "none" | RecurrenceFrequency;
 
 interface AppointmentInfoProps {
+  name: string;
+  setName: (name: string) => void;
   selectedDate: Date;
   setSelectedDate: (selectedDate: Date) => void;
   selectedClient: Client | null;
@@ -22,6 +30,12 @@ interface AppointmentInfoProps {
   setRate: (rate: string) => void;
   expense: string;
   setExpense: (expense: string) => void;
+  categoryIDs: string[];
+  setCategoryIDs: (categoryIDs: string[]) => void;
+  employeeIDs: string[];
+  setEmployeeIDs: (employeeIDs: string[]) => void;
+  selectedJob: Job | null;
+  setSelectedJob: (selectedJob: Job | null) => void;
   // Recurrence is only offered when creating a new appointment — omit these
   // props (as the edit form does) to hide the "Repeat" section entirely.
   repeatOption?: RepeatOption;
@@ -37,6 +51,8 @@ const REPEAT_OPTIONS: { value: RepeatOption; label: string }[] = [
 ];
 
 export default function AppointmentInfo({
+  name,
+  setName,
   selectedDate,
   setSelectedDate,
   selectedClient,
@@ -49,12 +65,37 @@ export default function AppointmentInfo({
   setRate,
   expense,
   setExpense,
+  categoryIDs,
+  setCategoryIDs,
+  employeeIDs,
+  setEmployeeIDs,
+  selectedJob,
+  setSelectedJob,
   repeatOption,
   onRepeatOptionChange,
   repeatEndDate,
   onRepeatEndDateChange,
 }: AppointmentInfoProps) {
   const clients = useClientStore((s) => s.clients);
+  const categories = useCategoryStore((s) => s.categories);
+  const employees = useEmployeeStore((s) => s.employees);
+  const jobs = useJobStore((s) => s.jobs);
+
+  function toggleCategory(categoryID: string, checked: boolean) {
+    setCategoryIDs(
+      checked
+        ? [...categoryIDs, categoryID]
+        : categoryIDs.filter((id) => id !== categoryID)
+    );
+  }
+
+  function toggleEmployee(employeeID: string, checked: boolean) {
+    setEmployeeIDs(
+      checked
+        ? [...employeeIDs, employeeID]
+        : employeeIDs.filter((id) => id !== employeeID)
+    );
+  }
 
   const eventDates: Date[] = [];
   return (
@@ -104,6 +145,15 @@ export default function AppointmentInfo({
 
       <div className="grid grid-cols-2 items-center gap-4">
         <div className="col-span-2 flex w-full min-w-0 flex-col gap-4">
+          <Input
+            label="Name"
+            placeholder="Deep Clean"
+            value={name}
+            onChange={setName}
+          />
+        </div>
+
+        <div className="col-span-2 flex w-full min-w-0 flex-col gap-4">
           <Autocomplete<Client>
             label="Clients"
             placeholder="Search Clients"
@@ -139,6 +189,56 @@ export default function AppointmentInfo({
             value={expense}
             onChange={setExpense}
           />
+        </div>
+
+        <div className="col-span-2 flex w-full min-w-0 flex-col gap-4">
+          <Autocomplete<Job>
+            label="Job"
+            placeholder="Search Jobs"
+            items={jobs}
+            itemToString={(job) => job?.name ?? ""}
+            selectedItem={selectedJob}
+            onSelectedItemChange={setSelectedJob}
+          />
+        </div>
+
+        <div className="col-span-2 flex w-full min-w-0 flex-col gap-2.5">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-sm font-bold tracking-wider text-primary uppercase">Categories</span>
+            <ManageCategories />
+          </div>
+          {categories.length === 0 ? (
+            <p className="m-0 text-sm text-muted-foreground">No categories yet.</p>
+          ) : (
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              {categories.map((category) => (
+                <Checkbox
+                  key={category.id}
+                  label={category.name}
+                  checked={categoryIDs.includes(category.id)}
+                  onChange={(checked) => toggleCategory(category.id, checked)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="col-span-2 flex w-full min-w-0 flex-col gap-2.5">
+          <span className="text-sm font-bold tracking-wider text-primary uppercase">Employees</span>
+          {employees.length === 0 ? (
+            <p className="m-0 text-sm text-muted-foreground">No employees yet.</p>
+          ) : (
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              {employees.map((employee) => (
+                <Checkbox
+                  key={employee.id}
+                  label={employee.name}
+                  checked={employeeIDs.includes(employee.id)}
+                  onChange={(checked) => toggleEmployee(employee.id, checked)}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
