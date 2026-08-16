@@ -1,17 +1,14 @@
 import type { BackupData } from "../definitions/backupData"
-
-const KEYS = {
-  appointments: 'appointments',
-  clients: 'clients',
-  payments: 'payments',
-} as const
+import { useAppointmentStore } from "../stores/useAppointmentStore"
+import { useClientStore } from "../stores/useClientStore"
+import { usePaymentStore } from "../stores/usePaymentStore"
 
 // Shared by local-file export and Google Drive backup — both need the same snapshot.
 export function buildBackupData(): BackupData {
   return {
-    appointments: JSON.parse(localStorage.getItem(KEYS.appointments) ?? '[]'),
-    clients: JSON.parse(localStorage.getItem(KEYS.clients) ?? '[]'),
-    payments: JSON.parse(localStorage.getItem(KEYS.payments) ?? '[]'),
+    appointments: useAppointmentStore.getState().appointments,
+    clients: useClientStore.getState().clients,
+    payments: usePaymentStore.getState().payments,
     exportedAt: new Date().toISOString(),
   }
 }

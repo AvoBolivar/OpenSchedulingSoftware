@@ -62,7 +62,9 @@ describe('googleDriveProvider', () => {
     })
 
     it('returns an unknown error when no client id is configured', async () => {
-      vi.unstubAllEnvs()
+      // Explicit empty string, not vi.unstubAllEnvs() — unstubbing reverts to whatever
+      // VITE_GOOGLE_CLIENT_ID a real .env on this machine actually has configured.
+      vi.stubEnv('VITE_GOOGLE_CLIENT_ID', '')
       mockGoogleIdentity()
 
       const result = await googleDriveProvider.connect()
