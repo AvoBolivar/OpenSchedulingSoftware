@@ -15,6 +15,7 @@ interface ButtonProps {
   icon?: React.ReactNode
   disabled?: boolean
   type?: "button" | "submit" | "reset"
+  className?: string
 }
 
 export default function Button({
@@ -24,6 +25,7 @@ export default function Button({
   icon,
   disabled = false,
   type = "button",
+  className,
 }: ButtonProps) {
   return (
     <ShadcnButton
@@ -31,6 +33,7 @@ export default function Button({
       onClick={onClick}
       disabled={disabled}
       type={type}
+      className={className}
     >
       {icon}
       {label}

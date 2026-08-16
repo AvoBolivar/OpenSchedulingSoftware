@@ -1,7 +1,9 @@
 import { useRef } from "react";
-import { exportData } from "../../lib/exportData";
-import { importData } from "../../lib/importData";
-import Button from "../basic/button/button";
+import { exportData } from "../../../lib/exportData";
+import { importData } from "../../../lib/importData";
+import { notify } from "../../../lib/notify";
+import { useNotificationStore } from "../../../stores/useNotificationStore";
+import Button from "../../basic/button/button";
 import "./importExportData.css";
 
 const ImportExportData = () => {
@@ -10,14 +12,17 @@ const ImportExportData = () => {
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    try {
-      await importData(file)
-      alert('Imported successfully — reload the page.')
-    } catch (err) {
-      alert(`Import failed: ${(err as Error).message}`)
-    } finally {
-      e.target.value = ""
+
+    const result = await importData(file)
+    e.target.value = ""
+
+    if (!result.ok) {
+      console.error(result.error.cause ?? result.error)
+      notify(result.error)
+      return
     }
+
+    useNotificationStore.getState().push("Imported successfully.")
   }
 
   return (

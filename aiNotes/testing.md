@@ -187,8 +187,15 @@ Not yet enforced (caught only by re-reading this file):
   cross-store state via `setState` rather than through the UI):
   [`collectionsList/readPaymentHistory.test.tsx`](../src/components/collectionsList/readPaymentHistory.test.tsx)
 
+- First `lib/` Result test covering `ok` + each meaningful `err.kind`:
+  [`lib/importData.test.ts`](../src/lib/importData.test.ts) (`parseBackupData`'s
+  `ok`/`parse`/`validation` branches), extended by
+  [`lib/backupProviders/googleDriveProvider.test.ts`](../src/lib/backupProviders/googleDriveProvider.test.ts)
+  for the `auth`/`storage`/`not_found` branches of a real network boundary — mocks
+  `fetch` and the `window.google` GIS global, never the store or `Result` shape
+  itself.
+
 Still none yet — first implementations become canonical and must be linked here when written:
-- first `lib/` Result test covering `ok` + each `err.kind` (likely the import parser)
 - first component *form* test, i.e. validation → inline error → successful submit calling the
   store action (likely `createClient.test.tsx`)
 

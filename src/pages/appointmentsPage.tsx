@@ -4,8 +4,6 @@ import { useShallow } from "zustand/shallow";
 import ThemedCalendar from "../components/calendar/calendar";
 import CreateAppointment from "../components/appointmentsList/createAppointment";
 import ReadAppointments from "../components/appointmentsList/readAppointments";
-import Button from "../components/basic/button/button";
-import ImportExportData from "../components/settings/importExportData";
 import "./pages.css";
 
 export default function AppointmentsPage() {
@@ -22,11 +20,6 @@ export default function AppointmentsPage() {
     ),
     [appointments, selectedDay]
   )
-
-  const deleteData = () => {
-    localStorage.clear();
-    window.location.reload();
-  }
 
   return (
     <div className="page">
@@ -59,15 +52,6 @@ export default function AppointmentsPage() {
         <span className="section__label">All Appointments</span>
         <div className="panel">
           <ReadAppointments />
-        </div>
-      </section>
-      <section className="section">
-        <div className="button-section">
-          <Button
-            label="Delete Data"
-            onClick={deleteData}
-          />
-          <ImportExportData />
         </div>
       </section>
     </div>
