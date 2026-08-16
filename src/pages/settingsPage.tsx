@@ -1,6 +1,7 @@
 import Button from "../components/basic/button/button"
 import GoogleAccount from "../components/settings/googleAccount/googleAccount"
 import ImportExportData from "../components/settings/importExportData/importExportData"
+import ManageCategories from "../components/settings/manageCategories/manageCategories"
 
 export default function SettingsPage() {
   const deleteData = () => {
@@ -26,6 +27,13 @@ export default function SettingsPage() {
         <span className="mb-2.5 block text-xs font-bold tracking-wider text-primary uppercase">Local Backup</span>
         <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
           <ImportExportData />
+        </div>
+      </section>
+
+      <section className="mt-6 sm:mt-7">
+        <span className="mb-2.5 block text-xs font-bold tracking-wider text-primary uppercase">Categories</span>
+        <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
+          <ManageCategories />
         </div>
       </section>
 
