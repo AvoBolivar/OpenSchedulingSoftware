@@ -9,7 +9,6 @@ import Modal from "../modal/modal";
 import Button from "../basic/button/button";
 import AppointmentInfo from "./appointmentInfo";
 import AppointmentFinished from "../confirmationModals/appointmentFinished";
-import "./createAppointment.css";
 
 interface UpdateAppointmentProps {
   isModalOpen: boolean;
@@ -125,7 +124,7 @@ function UpdateAppointmentForm({
 
   return (
     <Modal isOpen={isModalOpen} onClose={handleClose} title="Edit Appointment">
-      <div className="appointment-modal-layout">
+      <div className="mx-auto flex max-w-[800px] flex-col gap-6 px-1 py-2 md:grid md:grid-cols-[1.2fr_1fr] md:items-start">
         {componentDisplayed === "Update" ? (
           <div>
             <AppointmentInfo
@@ -142,7 +141,7 @@ function UpdateAppointmentForm({
               expense={expense}
               setExpense={setExpense}
             />
-            <div className="appt-form-actions">
+            <div className="mt-3 flex flex-col justify-end gap-2.5">
               <Button label="Update Appointment" onClick={() => updateAppointment()} />
               <Button label="Delete Appointment" onClick={deleteAppointment} />
               {appointment.show ? (
@@ -162,7 +161,7 @@ function UpdateAppointmentForm({
               helperPaid={helperPaid}
               setHelperPaid={setHelperPaid}
             />
-            <div className="appt-form-actions">
+            <div className="mt-3 flex flex-col justify-end gap-2.5">
               <Button label="Done" onClick={handleSubmit} />
               <Button label="Back" onClick={() => setComponentDisplayed("Update")} />
             </div>

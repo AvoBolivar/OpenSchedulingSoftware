@@ -2,7 +2,6 @@ import { useRef } from "react";
 import { exportData } from "../../lib/exportData";
 import { importData } from "../../lib/importData";
 import Button from "../basic/button/button";
-import "./importExportData.css";
 
 const ImportExportData = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -21,7 +20,7 @@ const ImportExportData = () => {
   }
 
   return (
-    <div className="import-export-row">
+    <div className="flex w-full flex-col gap-3 [&>button]:w-full">
       <Button label="Export Backup" variant="secondary" onClick={exportData} />
       <Button
         label="Import Backup"
@@ -33,7 +32,7 @@ const ImportExportData = () => {
         type="file"
         accept="application/json"
         onChange={handleFileChange}
-        className="import-export-file-input"
+        className="sr-only"
         aria-label="Import backup file"
       />
     </div>

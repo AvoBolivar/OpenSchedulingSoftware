@@ -1,6 +1,6 @@
 import { SquareCheckBig, CreditCard, UserCheck, Check } from "lucide-react";
 import Checkbox from "../basic/checkbox/checkbox";
-import "./appointmentFinished.css"
+import { cn } from "../../lib/utils";
 
 interface AppointmentFinishedProps {
   jobFinished: boolean
@@ -52,15 +52,15 @@ export default function AppointmentFinished({
   const allDone = completedCount === totalCount
 
   return (
-    <div className={`af-card ${allDone ? "complete" : ""}`}>
+    <div className={cn("p-5 transition-all duration-300", allDone && "rounded-xl border border-primary/40 shadow-lg")}>
       {/* Header with progress */}
-      <div className="af-header">
-        <div className="af-header-text">
-          <h3 className="af-title">Completion checklist</h3>
-          <p className="af-subtitle">
+      <div className="mb-4 flex items-center justify-between gap-4 border-b border-dashed border-border pb-4">
+        <div className="min-w-0 flex-1">
+          <h3 className="m-0 mb-1 text-base font-bold text-foreground">Completion checklist</h3>
+          <p className={cn("m-0 flex items-center gap-1 text-[13px] font-medium text-primary", allDone && "font-bold")}>
             {allDone ? (
               <>
-                <Check width={14} height={14} strokeWidth={3} style={{ verticalAlign: "-2px", marginRight: 4 }} />
+                <Check width={14} height={14} strokeWidth={3} aria-hidden="true" />
                 All tasks complete
               </>
             ) : (
@@ -68,14 +68,14 @@ export default function AppointmentFinished({
             )}
           </p>
         </div>
-        <div className="af-progress-ring">
+        <div className="relative h-11 w-11 shrink-0">
           <svg width="44" height="44" viewBox="0 0 44 44">
             <circle
               cx="22"
               cy="22"
               r="18"
               fill="none"
-              stroke="#ffa5ab40"
+              className="stroke-border"
               strokeWidth="4"
             />
             <circle
@@ -83,33 +83,41 @@ export default function AppointmentFinished({
               cy="22"
               r="18"
               fill="none"
-              stroke={allDone ? "#a53860" : "#da627d"}
+              className="stroke-primary transition-all duration-500 ease-in-out"
               strokeWidth="4"
               strokeLinecap="round"
               strokeDasharray={`${2 * Math.PI * 18}`}
               strokeDashoffset={`${2 * Math.PI * 18 * (1 - progress / 100)}`}
               transform="rotate(-90 22 22)"
-              style={{ transition: "stroke-dashoffset 0.4s ease, stroke 0.3s ease" }}
             />
           </svg>
-          <span className="af-progress-text">{completedCount}/{totalCount}</span>
+          <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold tracking-wide text-primary">{completedCount}/{totalCount}</span>
         </div>
       </div>
 
       {/* Task list */}
-      <div className="af-task-list">
+      <div className="flex flex-col gap-2">
         {items.map((item) => (
           <div
             key={item.key}
-            className={`af-task ${item.checked ? "checked" : ""}`}
+            className={cn(
+              "flex cursor-pointer items-center gap-3 rounded-[10px] border border-transparent bg-primary/5 px-3.5 py-3 transition-colors active:scale-[0.99] hover:border-primary/20 hover:bg-primary/10",
+              item.checked && "border-primary/30 bg-primary/10"
+            )}
             onClick={() => item.onChange(!item.checked)}
           >
-            <div className="af-task-icon">{item.icon}</div>
-            <div className="af-task-content">
-              <span className="af-task-label">{item.label}</span>
-              <span className="af-task-description">{item.description}</span>
+            <div className={cn(
+              "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors",
+              item.checked && "border-primary bg-primary text-primary-foreground"
+            )}>{item.icon}</div>
+            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className={cn(
+                "text-sm font-semibold text-foreground transition-colors",
+                item.checked && "text-muted-foreground line-through decoration-primary/40 decoration-[1.5px]"
+              )}>{item.label}</span>
+              <span className={cn("text-xs leading-tight text-muted-foreground", item.checked && "text-muted-foreground/60")}>{item.description}</span>
             </div>
-            <div className="af-task-checkbox" onClick={(e) => e.stopPropagation()}>
+            <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
               <Checkbox
                 label=""
                 checked={item.checked}

@@ -1,6 +1,5 @@
 import Calendar from "react-calendar"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import "./calendar.css"
 
 interface ThemedCalendarProps {
   value: Date | null
@@ -8,6 +7,15 @@ interface ThemedCalendarProps {
   eventDates?: Date[]
   minDate?: Date
 }
+
+// react-calendar renders its own fixed BEM class names (`.react-calendar__*`)
+// that we can't attach per-element Tailwind classes to. Tailwind's arbitrary-
+// variant `_`→space rule collides with the literal underscores in those BEM
+// names (verified: `\_` escaping still gets collapsed to a space when
+// Tailwind builds the descendant selector), so this is themed via a `@layer
+// components` block in index.css (still token/Tailwind-driven via `@apply`)
+// instead — see the "react-calendar" section there.
+const CALENDAR_CLASSNAME = "themed-calendar"
 
 export default function ThemedCalendar({
   value,
@@ -32,7 +40,7 @@ export default function ThemedCalendar({
           if (val instanceof Date) onChange(val)
         }}
         minDate={minDate}
-        className="themed-calendar"
+        className={CALENDAR_CLASSNAME}
         calendarType="gregory"
         prev2Label={null}
         next2Label={null}
@@ -43,7 +51,10 @@ export default function ThemedCalendar({
         }
         tileContent={({ date, view }) =>
           view === "month" && hasEvent(date) ? (
-            <span className="cal-event-dot" aria-label="Has event" />
+            <span
+              className="cal-event-dot mt-px block h-[5px] w-[5px] rounded-full bg-primary"
+              aria-label="Has event"
+            />
           ) : null
         }
         tileClassName={({ date, view }) => {

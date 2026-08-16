@@ -4,7 +4,6 @@ import FinanceCard from "../components/basic/cards/financeCard"
 import CollectionsList from "../components/collectionsList/collectionsList"
 import ReadPaymentHistory from "../components/collectionsList/readPaymentHistory"
 import { usePaymentStore } from "../stores/usePaymentStore"
-import "./pages.css"
 
 export default function FinancePage() {
   const payments = usePaymentStore((s) => s.payments)
@@ -35,17 +34,17 @@ export default function FinancePage() {
   )
 
   return (
-    <div className="page">
-      <header className="page__header">
-        <h1 className="page__title">Finance</h1>
-        <p className="page__subtitle">
+    <div className="mx-auto w-full max-w-[920px] px-4 pt-5 pb-[calc(44px+env(safe-area-inset-bottom))] pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] text-foreground sm:px-5 sm:pt-7 sm:pb-14">
+      <header className="mb-2">
+        <h1 className="m-0 text-[22px] leading-tight font-bold text-primary sm:text-2xl">Finance</h1>
+        <p className="mt-1 mb-0 text-sm text-muted-foreground">
           Track earnings, balances, and payouts
         </p>
       </header>
 
-      <section className="section">
-        <span className="section__label">Overview</span>
-        <div className="finance-grid">
+      <section className="mt-6 sm:mt-7">
+        <span className="mb-2.5 block text-xs font-bold tracking-wider text-primary uppercase">Overview</span>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <FinanceCard
             label="This Week"
             amount={totalWeek}
@@ -97,16 +96,16 @@ export default function FinancePage() {
         </div>
       </section>
 
-      <section className="section">
-        <span className="section__label">People Who Owe Money</span>
-        <div className="panel">
+      <section className="mt-6 sm:mt-7">
+        <span className="mb-2.5 block text-xs font-bold tracking-wider text-primary uppercase">People Who Owe Money</span>
+        <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
           <CollectionsList />
         </div>
       </section>
 
-      <section className="section">
-        <span className="section__label">Payment History</span>
-        <div className="panel">
+      <section className="mt-6 sm:mt-7">
+        <span className="mb-2.5 block text-xs font-bold tracking-wider text-primary uppercase">Payment History</span>
+        <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
           <ReadPaymentHistory />
         </div>
       </section>

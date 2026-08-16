@@ -5,7 +5,7 @@ import TimePicker from "../basic/time/timePicker";
 import { useClientStore } from "../../stores/useClientStore";
 import type { Client } from "../../definitions/client";
 import type { RecurrenceFrequency } from "../../lib/date";
-import "./createAppointment.css";
+import { cn } from "../../lib/utils";
 
 export type RepeatOption = "none" | RecurrenceFrequency;
 
@@ -59,9 +59,9 @@ export default function AppointmentInfo({
   const eventDates: Date[] = [];
   return (
     <div>
-      <div className="calendar-section">
-        <div className="calendar-label">
-          <span className="appt-form-label">Starts On</span>
+      <div className="flex flex-col items-center p-4">
+        <div className="mb-[5px] place-self-start">
+          <span className="text-sm font-bold tracking-wider text-primary uppercase">Starts On</span>
         </div>
           <ThemedCalendar
             value={selectedDate}
@@ -71,14 +71,17 @@ export default function AppointmentInfo({
       </div>
 
       {onRepeatOptionChange && (
-        <div className="repeat-section">
-          <span className="appt-form-label">Repeat</span>
-          <div className="repeat-toggle">
+        <div className="flex flex-col gap-2.5 px-1 pb-4">
+          <span className="text-sm font-bold tracking-wider text-primary uppercase">Repeat</span>
+          <div className="flex gap-1 rounded-[10px] bg-primary/10 p-1">
             {REPEAT_OPTIONS.map(({ value, label }) => (
               <button
                 key={value}
                 type="button"
-                className={`repeat-option ${repeatOption === value ? "selected" : ""}`}
+                className={cn(
+                  "min-h-10 min-w-0 flex-1 rounded-[7px] border-0 bg-transparent px-1.5 py-2.5 text-[13px] font-semibold text-primary transition-colors hover:bg-primary/20",
+                  repeatOption === value && "bg-primary text-primary-foreground hover:bg-primary"
+                )}
                 onClick={() => onRepeatOptionChange(value)}
               >
                 {label}
@@ -87,8 +90,8 @@ export default function AppointmentInfo({
           </div>
 
           {repeatOption && repeatOption !== "none" && onRepeatEndDateChange && (
-            <div className="repeat-end-date">
-              <span className="appt-form-label">Ends On</span>
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-bold tracking-wider text-primary uppercase">Ends On</span>
               <ThemedCalendar
                 value={repeatEndDate ?? null}
                 onChange={onRepeatEndDateChange}
@@ -99,8 +102,8 @@ export default function AppointmentInfo({
         </div>
       )}
 
-      <div className="appt-form-section">
-        <div className="appt-form-group full-width">
+      <div className="grid grid-cols-2 items-center gap-4">
+        <div className="col-span-2 flex w-full min-w-0 flex-col gap-4">
           <Autocomplete<Client>
             label="Clients"
             placeholder="Search Clients"
@@ -111,7 +114,7 @@ export default function AppointmentInfo({
           />
         </div>
 
-        <div className="appt-form-group half-width">
+        <div className="col-span-1 w-full min-w-0">
           <TimePicker
             label="Start Time"
             value={startTime}
@@ -119,11 +122,11 @@ export default function AppointmentInfo({
           />
         </div>
 
-        <div className="appt-form-group half-width">
+        <div className="col-span-1 w-full min-w-0">
           <TimePicker label="End Time" value={endTime} onChange={setEndTime} />
         </div>
 
-        <div className="appt-form-group full-width">
+        <div className="col-span-2 flex w-full min-w-0 flex-col gap-4">
           <Input
             label="Price"
             placeholder="200.00"

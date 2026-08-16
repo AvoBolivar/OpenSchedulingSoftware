@@ -204,3 +204,114 @@
     @apply font-sans;
   }
 }
+
+/*
+ * react-calendar (components/calendar/calendar.tsx) renders its own fixed
+ * BEM class names, so it can't take a Tailwind class per sub-element the way
+ * app components can. Themed here via `@apply` (still token-driven, no raw
+ * hex) rather than as Tailwind arbitrary-variant selectors in the component,
+ * because Tailwind's `_`→space conversion for arbitrary values collides with
+ * the literal double underscores in react-calendar's class names.
+ */
+@layer components {
+  .themed-calendar {
+    @apply w-full rounded-2xl border-[1.5px] border-border bg-card p-3.5 shadow-md sm:p-4;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .themed-calendar .react-calendar__navigation {
+    @apply mb-3 flex h-auto items-center;
+  }
+
+  .themed-calendar .react-calendar__navigation button {
+    @apply min-w-0 cursor-pointer rounded-[7px] border-0 bg-transparent px-2 py-1.5 text-primary transition-colors;
+  }
+
+  .themed-calendar .react-calendar__navigation button:enabled:hover,
+  .themed-calendar .react-calendar__navigation button:enabled:focus {
+    @apply bg-primary/15 text-foreground;
+  }
+
+  .themed-calendar .react-calendar__navigation button:disabled {
+    @apply cursor-not-allowed bg-transparent opacity-40;
+  }
+
+  .themed-calendar .react-calendar__navigation__arrow {
+    @apply flex min-h-11 min-w-11 items-center justify-center;
+  }
+
+  .themed-calendar .react-calendar__navigation__label {
+    @apply min-h-11 flex-grow text-[15px] font-bold tracking-wide;
+  }
+
+  .themed-calendar .react-calendar__month-view__weekdays {
+    @apply mb-1;
+  }
+
+  .themed-calendar .react-calendar__month-view__weekdays__weekday {
+    @apply py-1.5 text-center text-[11px] font-bold tracking-wide text-primary uppercase;
+  }
+
+  .themed-calendar .react-calendar__month-view__weekdays__weekday abbr {
+    @apply cursor-default no-underline;
+  }
+
+  .themed-calendar .react-calendar__tile {
+    @apply relative flex aspect-square cursor-pointer flex-col items-center justify-center gap-0.5 rounded-lg border-0 bg-transparent py-1.5 text-sm font-medium text-foreground transition-colors;
+  }
+
+  @media (min-width: 560px) {
+    .themed-calendar .react-calendar__tile {
+      @apply py-2.5;
+    }
+  }
+
+  .themed-calendar .react-calendar__tile:enabled:hover {
+    @apply bg-primary/15;
+  }
+
+  .themed-calendar .react-calendar__tile:active {
+    @apply bg-primary/20;
+  }
+
+  .themed-calendar .react-calendar__month-view__days__day--neighboringMonth {
+    @apply text-muted-foreground/40;
+  }
+
+  .themed-calendar .react-calendar__month-view__days__day--weekend {
+    @apply text-primary;
+  }
+
+  .themed-calendar .react-calendar__tile.cal-today {
+    @apply bg-primary/20 font-bold text-primary;
+    box-shadow: inset 0 0 0 1.5px var(--primary);
+  }
+
+  .themed-calendar .react-calendar__tile.cal-today:enabled:hover {
+    @apply bg-primary/30;
+  }
+
+  .themed-calendar .react-calendar__tile--active,
+  .themed-calendar .react-calendar__tile--active:enabled:hover,
+  .themed-calendar .react-calendar__tile--active:enabled:focus {
+    @apply bg-primary font-bold text-primary-foreground shadow-md;
+  }
+
+  .themed-calendar .cal-event-dot {
+    @apply bg-primary;
+  }
+
+  .themed-calendar .react-calendar__tile--active .cal-event-dot {
+    @apply bg-primary-foreground;
+  }
+
+  .themed-calendar .react-calendar__year-view .react-calendar__tile,
+  .themed-calendar .react-calendar__decade-view .react-calendar__tile,
+  .themed-calendar .react-calendar__century-view .react-calendar__tile {
+    @apply aspect-auto px-1.5 py-4;
+  }
+
+  .themed-calendar button:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary/50;
+  }
+}
