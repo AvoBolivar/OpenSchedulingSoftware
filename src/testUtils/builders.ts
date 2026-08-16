@@ -1,6 +1,7 @@
 import type { Client } from '../definitions/client'
 import type { Appointment } from '../definitions/appointments'
 import type { Payment } from '../definitions/payments'
+import type { Category } from '../definitions/category'
 
 let counter = 0
 function nextId(prefix: string): string {
@@ -34,6 +35,14 @@ export function buildAppointment(overrides: Partial<Appointment> = {}): Appointm
     endTime: '10:00 AM',
     expense: 25,
     show: true,
+    ...overrides,
+  }
+}
+
+export function buildCategory(overrides: Partial<Category> = {}): Category {
+  return {
+    id: nextId('category'),
+    name: 'Test Category',
     ...overrides,
   }
 }
