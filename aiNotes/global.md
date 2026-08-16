@@ -1,7 +1,7 @@
 # Global
 
 This is the one file every task reads unconditionally, per
-[addContext.md](../prompts/addContext.md) §1 — kept short on purpose, because
+[CLAUDE.md](../CLAUDE.md) — kept short on purpose, because
 always-loaded noise causes drift (see [aiNotes.md](../humanNotes/aiNotes.md)).
 Implementation detail belongs in the topic files it points to below, not here; if
 you're looking for *how* something is built, this file is the wrong place — go to §2's
@@ -42,8 +42,8 @@ person's cleaning business, not a multi-tenant product.
 
 ## 2. Map of the context system
 
-Everything else loads by trigger or by target module, per
-[addContext.md](../prompts/addContext.md) §1 — this is the index, not the content:
+Everything else loads by trigger or by target module — this is the index, not the
+content:
 
 | File | Load when… |
 |---|---|
@@ -52,7 +52,8 @@ Everything else loads by trigger or by target module, per
 | [testing.md](testing.md) | the task writes or changes any test (almost always) |
 | [design.md](design.md) | the task changes anything the user can see |
 | `src/<module>/CLAUDE.md` | the task's target module has one — currently exist for `definitions/`, `hooks/`, `lib/`, `pages/`, `stores/`; `components/` and its subfolders don't have one yet, use the topic files' canonical examples instead |
-| [../prompts/addContext.md](../prompts/addContext.md) | drafting or executing a task file (`prompts/add.md`) |
+| [../docs/agents/domain.md](../docs/agents/domain.md) | the task needs the business-level picture — points at root [../CONTEXT.md](../CONTEXT.md) (product/feature vision) and `docs/adr/`; note CONTEXT.md describes the full intended feature set, some of which (invoicing, inventory, analytics — see its "Recommended Addition" modules) isn't built yet, whereas §0 above is what actually exists today |
+| [../docs/agents/issue-tracker.md](../docs/agents/issue-tracker.md) | the task creates, reads, or comments on a GitHub issue |
 | [../humanNotes/aiNotes.md](../humanNotes/aiNotes.md) | the *why* behind a rule is needed — rare; this is philosophy for humans, not day-to-day reference |
 
 ## Verification status
@@ -63,9 +64,9 @@ Enforced mechanically today: nothing — this is a file an AI is asked to read, 
 nothing currently checks that it was.
 
 Not yet enforced (caught only by re-reading this file):
-- a task proceeding without having read this file first
-- this file's §2 map going stale when a new topic file or module `CLAUDE.md` is added
-  (the discipline that should prevent it lives in
-  [addContext.md](../prompts/addContext.md) §6, which currently only names
-  `addContext.md`'s own map as something to check — this file's map should be checked
-  at the same time and isn't yet)
+- a task proceeding without having read this file first — the only guarantee is
+  root [CLAUDE.md](../CLAUDE.md) pointing here at the start of every session;
+  nothing checks that the pointer was actually followed
+- this file's §2 map going stale when a new topic file, module `CLAUDE.md`, or
+  `docs/agents/*.md` file is added — no tooling checks the map against the
+  filesystem, so a new file here needs a manual row added at the same time

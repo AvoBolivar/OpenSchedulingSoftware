@@ -1,4 +1,5 @@
-import "./navbar.css"
+import { Calendar, ChartLine, Settings, Users } from "lucide-react"
+import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs"
 
 export type PageId = "appointments" | "finance" | "clients" | "settings"
 
@@ -7,31 +8,28 @@ interface NavBarProps {
   onChange: (page: PageId) => void
 }
 
-const NAV_ITEMS: { id: PageId; label: string }[] = [
-  { id: "appointments", label: "Appointments" },
-  { id: "finance", label: "Finance" },
-  { id: "clients", label: "Clients" },
-  { id: "settings", label: "Settings" },
+const NAV_ITEMS: { id: PageId; label: string; icon: React.ReactNode }[] = [
+  { id: "appointments", label: "Appointments", icon: <Calendar aria-hidden="true" width={16} height={16} /> },
+  { id: "finance", label: "Finance", icon: <ChartLine aria-hidden="true" width={16} height={16} /> },
+  { id: "clients", label: "Clients", icon: <Users aria-hidden="true" width={16} height={16} /> },
+  { id: "settings", label: "Settings", icon: <Settings aria-hidden="true" width={16} height={16} /> },
 ]
 
 export default function NavBar({ current, onChange }: NavBarProps) {
   return (
-    <nav className="navbar">
-      {NAV_ITEMS.map(({ id, label }) => {
-        const isActive = current === id
-        return (
-          <button
+    <Tabs value={current} onValueChange={(value) => onChange(value as PageId)}>
+      <TabsList className="h-auto w-full gap-1 bg-transparent p-0">
+        {NAV_ITEMS.map(({ id, label, icon }) => (
+          <TabsTrigger
             key={id}
-            type="button"
-            className={
-              "navbar__tab" + (isActive ? " navbar__tab--active" : "")
-            }
-            onClick={() => onChange(id)}
+            value={id}
+            className="flex-col gap-0.5 rounded-lg py-1.5 text-xs data-active:bg-primary data-active:text-primary-foreground data-active:shadow-none"
           >
+            {icon}
             {label}
-          </button>
-        )
-      })}
-    </nav>
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
   )
 }

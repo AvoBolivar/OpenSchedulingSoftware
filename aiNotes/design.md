@@ -3,63 +3,81 @@
 This is the placement system for UI/visual decisions: what the app's theme is, where a
 UI need gets met before new CSS gets written, and which icon set is available. When
 building a screen, find the primitive here first; only write new component-level CSS
-for something no existing primitive covers.
+for something no existing primitive covers — and even then, prefer Tailwind utility
+classes over a new `.css` file (see §0).
 
-Core decision, stated once: **the app has one hand-authored visual theme — a warm
-rose/blush/burgundy palette on a Georgia serif typeface — expressed as hardcoded hex
-values directly in each component's CSS file. It is not the CSS custom properties in
-`src/index.css`.** Those variables (`--text`, `--bg`, `--accent`, etc., purple-accented)
-are unmodified Vite/React template scaffolding, unused by any real screen. Do not read
-them as the theme, and do not "fix" them to match without being asked — see §4.
+Core decision, stated once: **the app is built on shadcn/ui (Radix primitives + Tailwind
+v4 + `class-variance-authority`), styled via CSS custom properties that switch per
+`data-theme` attribute on `<html>`, with a modern sans-serif typeface (Geist).** There is
+no more hand-authored component CSS and no more hardcoded hex — every color is a
+semantic token (`bg-primary`, `text-muted-foreground`, etc.) that resolves differently
+per theme. This replaced the app's original single hand-authored rose/burgundy palette
+on Georgia serif; see §0 for how that identity was preserved as one of four selectable
+themes.
 
-## 0. Palette and typography
+## 0. Theming: tokens, presets, and the toggle
 
-Typeface: `'Georgia', serif` (occasionally written `Georgia, "Times New Roman", serif`)
-everywhere — every component CSS file that sets a font declares this same stack. No
-other typeface appears anywhere in the app.
+All theme tokens live in `src/index.css`, following shadcn's v4 convention: a `@theme
+inline` block maps Tailwind color utilities (`--color-primary`, `--color-background`,
+etc.) to CSS custom properties (`--primary`, `--background`, etc.), and those custom
+properties are redefined per preset under `[data-theme="<name>"]` selectors. `:root`
+doubles as the `slate` block (the default, applied before any theme is chosen).
 
-Colors are hardcoded hex, reused by convention rather than a token file:
+Four light-only presets, defined in `src/definitions/theme.ts` (`ThemeName` union) and
+`src/lib/theme.ts` (`THEMES` — the display data backing the toggle):
 
-| Hex | Role |
-|---|---|
-| `#fdf2ea` | Page background (cream) |
-| `#fff8f5` | Panel/card surface (near-white) |
-| `#da627d` | Primary brand/action color — default button fill, primary accent |
-| `#a53860` | Secondary accent — headings, section labels, hover states |
-| `#450920` | Darkest — body text, pressed/active states |
-| `#ffa5ab` | Light pink — almost always used as a low-opacity tint (`#ffa5ab30`, `#ffa5ab50`, …) for hover backgrounds and borders, rarely at full opacity |
+| Theme | Feel | Notes |
+|---|---|---|
+| `slate` (default) | Neutral gray-blue, professional | The baseline; no accent narrative |
+| `rose` | Warm rose/blush/burgundy | Preserves the app's original hand-authored identity as a token-based preset |
+| `ocean` | Blue/teal | |
+| `forest` | Green | |
 
-Opacity is layered onto these same six hexes via 2-digit hex-alpha suffixes
-(`#45092040`, `#a53860aa`) rather than `rgba()` in most places, though `rgba()` appears
-for shadows (e.g. `rgba(69, 9, 32, 0.06)` — always shadow-colored from `#450920`). When
-adding a new tint, reuse one of the six hexes above with a hex-alpha suffix; don't
-introduce a new base color.
+No dark mode — every preset is light-only. If dark mode is added later, follow shadcn's
+`.dark` class convention and update this section.
 
-**Gotcha:** `index.css` defines a second, unrelated set of theme variables
-(`--accent: #aa3bff`, light/dark `@media (prefers-color-scheme: dark)` block, etc.).
-These are leftover from the Vite template this project was bootstrapped from and are
-not wired into any page, card, or `basic/` component. Do not extend them, and do not
-assume the app supports dark mode — it doesn't; every hex above is a light-theme value
-with no dark counterpart.
+**How switching works:** `components/themeProvider/themeContext.ts` defines the
+`ThemeContext` (a plain `createContext`, kept in its own file so neither the provider nor
+the hook file mixes component and non-component exports — Vite Fast Refresh requires
+that separation, enforced by `eslint-plugin-react-refresh`).
+`components/themeProvider/themeProvider.tsx` is the `ThemeProvider` component — persists
+the selection via the existing generic `hooks/useLocalStorage.ts` hook (key `"theme"`,
+default `"slate"`) and sets `document.documentElement.dataset.theme` in a `useEffect`.
+Mounted once, wrapping `<Home />` in `App.tsx`. `hooks/useTheme.ts` is the consumer hook.
+`basic/themeToggle/themeToggle.tsx` is the visible control (a `ui/select`), mounted in
+`pages/home.tsx`'s sticky header.
+
+Typeface: **Geist Variable** (`@fontsource-variable/geist`, self-hosted via npm — not a
+runtime webfont fetch), set as `--font-sans` in the `@theme inline` block. No other
+typeface appears anywhere in the app.
+
+**Gotcha carried forward from before this migration:** don't add a second base color or
+a raw hex anywhere in `src/components/` — every color should be a token
+(`bg-primary`, `text-muted-foreground`, `border-border`, …) so it stays theme-aware
+across all four presets. A literal hex in a `className` or inline style is a smell.
 
 ## 1. Where basic UI components live
 
 Every generic, reusable primitive lives under `components/basic/`, one folder per
 primitive (see [directoryLogic.md](directoryLogic.md) §2 for the placement/layering
 rule for `basic/` itself — this file only covers what's already there and how to use
-it):
+it). Since this migration, **every one of these is a thin, prop-API-preserving wrapper
+around one or more `components/ui/*` primitives** (shadcn's CLI-managed output — see
+directoryLogic.md §1) plus Tailwind utility classes; none hand-roll their own CSS file
+anymore.
 
-| Primitive | Path | Notes |
-|---|---|---|
-| Button | `basic/button/button.tsx` | `variant: "primary" \| "secondary" \| "danger"` (default `primary`), optional `icon` (a lucide element, see §2), optional `disabled`. This is the **only** button implementation — never write a raw `<button>` styled ad hoc; add a variant here if a new visual treatment is needed. |
-| Input | `basic/input/input.tsx` | Labeled text input, `inputMode` for numeric/tel/email keyboards on mobile. |
-| Checkbox | `basic/checkbox/checkbox.tsx` | Custom-styled checkbox using the `Check` icon (§2) over a hidden native `<input type="checkbox">`, so it stays keyboard/screen-reader accessible. |
-| Autocomplete | `basic/autocomplete/autocomplete.tsx` | Generic `<T>`-typed searchable select (used for both client picking and payment-method picking). |
-| TimePicker | `basic/time/timePicker.tsx` | Labeled time input, string-valued (`"9:00 AM"` style, not a `Date`). |
-| NavBar | `basic/navbar/navbar.tsx` | The one top-level tab bar; `PageId` union lives here and is the source of truth for nav-bar tabs. |
-| Toast | `basic/toast/toast.tsx` | Fixed-position stack of auto-dismissing (5s) error/status messages; rendered once in `App.tsx`. The only surface `notify()` (see [errorHandling.md](errorHandling.md) §6) renders through — never a per-feature ad-hoc banner. |
-| Cards | `basic/cards/*Card.tsx` | Family of presentational, entity-shaped display cards (`appointmentCard`, `collectionCard`, `financeCard`, `payoutCard`). `clientCard` is **not** here — it moved to `clientsList/` because it needs feature-specific update/delete components; see directoryLogic.md §2 for why that split exists. |
-| Modal | `components/modal/modal.tsx` | Portal-based dialog primitive (Esc-to-close, backdrop click, scroll lock). Not under `basic/` since it's a singleton pattern rather than a family, but is imported by feature folders the same way `basic/` components are. |
+| Primitive | Path | Built from | Notes |
+|---|---|---|---|
+| Button | `basic/button/button.tsx` | `ui/button` | `variant: "primary" \| "secondary" \| "danger"` (default `primary`) maps internally to shadcn's `default`/`secondary`/`destructive`. Accepts an optional `className` (forwarded to `ui/button`) for one-off layout needs like `w-full`/`flex-1` — still the **only** button implementation, never write a raw `<button>` styled ad hoc. |
+| Input | `basic/input/input.tsx` | `ui/input` + `ui/label` | Labeled text input, `inputMode` for numeric/tel/email keyboards on mobile. |
+| Checkbox | `basic/checkbox/checkbox.tsx` | `ui/checkbox` + `ui/label` | Radix-backed, keyboard/screen-reader accessible natively (no more hand-rolled focus-ring CSS). |
+| Autocomplete | `basic/autocomplete/autocomplete.tsx` | `ui/popover` + `ui/command` | Generic `<T>`-typed searchable select (used for both client picking and payment-method picking). Click-to-open trigger button showing the current selection, per shadcn's combobox pattern — no longer a live-typing-always-visible field (was `downshift`-based before). |
+| TimePicker | `basic/time/timePicker.tsx` | `ui/popover` + `ui/select` ×3 | Labeled time input, string-valued (`"9:00 AM"` style, not a `Date`). Hour/minute/AM-PM as three `Select`s plus a "Now" button, replacing the old hand-rolled scroll-column dropdown. |
+| NavBar | `basic/navbar/navbar.tsx` | `ui/tabs` | The one top-level tab bar; `PageId` union lives here and is the source of truth for nav-bar tabs. |
+| ThemeToggle | `basic/themeToggle/themeToggle.tsx` | `ui/select` | See §0. |
+| Toast | `basic/toast/toast.tsx` | — (plain Tailwind) | Fixed-position stack of auto-dismissing (5s) error/status messages, rendered once in `App.tsx`. No `ui/toast`/`sonner` primitive exists yet, so this is styled directly with token classes (`bg-foreground`/`text-background` for a high-contrast inverted chip) rather than a `ui/*` wrapper — if a shadcn toast primitive is added later, migrate this onto it. The only surface `notify()` (see [errorHandling.md](errorHandling.md) §6) renders through — never a per-feature ad-hoc banner. |
+| Cards | `basic/cards/*Card.tsx` | `ui/card` | Family of presentational, entity-shaped display cards (`appointmentCard`, `collectionCard`, `financeCard`, `payoutCard`, `paymentHistoryCard`). Still hand-manage `role="button"` + keyboard handling for clickable cards — Radix has no interactive-card primitive. `clientCard` is **not** here — it moved to `clientsList/` because it needs feature-specific update/delete components; see directoryLogic.md §2 for why that split exists. |
+| Modal | `components/modal/modal.tsx` | `ui/dialog` (desktop) + `ui/drawer` (mobile) | Responsive: switches on `hooks/useMediaQuery.ts` at the existing 560px breakpoint — Radix `Dialog` centered on desktop, Vaul `Drawer` bottom-sheet on mobile, matching the pre-migration behavior. Esc-close, backdrop-click, focus trap, and scroll lock are now handled natively instead of hand-rolled. Not under `basic/` since it's a singleton pattern rather than a family. |
 
 **Before writing new markup for a form field, button, toggle, or card, check this table
 first.** A new screen should be composable almost entirely from these plus feature-level
@@ -73,57 +91,58 @@ Package: **`lucide-react`**. Always a named import directly from the package:
 import { Clock, MapPin, Trash2 } from "lucide-react"
 ```
 
-No icon wrapper component exists — lucide components are used inline. Conventions
-observed everywhere they're used:
+No icon wrapper component exists — lucide components are used inline, both directly and
+inside `ui/*` primitives (shadcn's generated components also default to lucide).
+Conventions observed everywhere they're used:
 - Explicit `width`/`height` props, not CSS sizing — typically `14`–`18` for inline
   detail-row icons, `24` inside a `basic/cards/financeCard` icon badge.
 - `aria-hidden="true"` on every icon, since the icon is always paired with adjacent
   text (a label, a detail string) that already carries the meaning.
-- `strokeWidth` is only overridden when an icon needs to read at very small size (e.g.
-  `Checkbox`'s embedded `Check` uses `strokeWidth={3.5}`).
+- `strokeWidth` is only overridden when an icon needs to read at very small size.
 
 Icons currently in use, as a reference set (not an allow-list — pull any other
 `lucide-react` icon as needed, matching the conventions above):
-`Check`, `ChevronDown`, `ChevronLeft`, `ChevronRight`, `Clock`, `Calendar`, `MapPin`,
-`Phone`, `FileText`, `Trash2`, `ChartLine`, `UserCheck`, `SquareCheckBig`, `CreditCard`.
+`Check`, `CheckCircle2`, `ChevronDown`, `ChevronsUpDown`, `ChevronLeft`, `ChevronRight`,
+`Clock`, `Calendar`, `ChartLine`, `Users`, `MapPin`, `Phone`, `FileText`, `Trash2`,
+`UserCheck`, `SquareCheckBig`, `CreditCard`, `Palette`, `X`.
 
 ## 3. Themed-variant component pattern
 
 When a `basic/` component needs multiple visual treatments, the established pattern is
-a string-literal-union prop mapped to a CSS class suffix — not inline styles, not a
-separate component per variant. Two canonical examples:
-- `Button`'s `variant` prop → `btn-${variant}` class (`basic/button/button.tsx` +
-  `button.css`).
-- `FinanceCard`'s `colorScheme` prop (`"rose" | "deep" | "blush" | "plum"`, default
-  `"rose"`) → `finance-${colorScheme}` class (`basic/cards/financeCard.tsx` +
-  `financeCard.css`). Each scheme is a named role (`rose` = primary, `deep` = strong
-  rose, `blush` = soft peach, `plum` = darkest/emphasis), not a raw color name — follow
-  this naming style (semantic role, not hex-describing) if another themed-variant
-  component is added.
+a string-literal-union prop mapped to Tailwind classes (via a lookup object or, inside
+`ui/*` primitives, `class-variance-authority`) — not inline styles. Two canonical
+examples:
+- `Button`'s `variant` prop → mapped to a shadcn `ui/button` `variant` (`basic/button/button.tsx`).
+- `FinanceCard`'s `colorScheme` prop (`"rose" | "deep" | "blush" | "plum" | "berry" |
+  "coral"`, default `"rose"`) → a `COLOR_SCHEME_CLASSES` lookup onto the theme's
+  `chart-1`..`chart-5` + `primary` tokens (`basic/cards/financeCard.tsx`). Each scheme is
+  a named role, not a raw color name, and each is theme-aware by construction since it
+  reads chart tokens rather than fixed hexes — follow this naming style (semantic role,
+  token-backed) if another themed-variant component is added.
 
 ## 4. Verification status
 
 Per [aiNotes.md](../humanNotes/aiNotes.md): enforced beats specified.
 
-Enforced mechanically today: nothing. There is no design-token file, no Stylelint rule,
-no shared constants module for the palette — every hex value in §0 is duplicated by
-hand across CSS files, and nothing stops a new file from introducing a seventh base
-color or a second typeface.
+Enforced mechanically today: nothing new — Tailwind/shadcn make a stray hex or a second
+typeface easy to avoid (the token system is the path of least resistance), but nothing
+in CI actually blocks one.
 
 Not yet enforced (caught only by re-reading this file):
-- a new component using `rgba()`/a raw hex outside the six-color palette in §0
-- a new component reading `index.css`'s dead `--accent`/`--text`/`--bg` variables
-- a raw `<button>`/`<input>` styled ad hoc instead of reusing `basic/`
+- a new component using a raw hex or `rgba()` instead of a token/Tailwind color utility
+- a raw `<button>`/`<input>` styled ad hoc instead of reusing `basic/` or `ui/`
 - an icon from a different package, or an icon missing `aria-hidden`
+- a `.dark` block or a fifth theme preset added without updating §0's table
 
-Next step: extract §0's palette into CSS custom properties in `index.css` (replacing
-the current unused Vite-template variables), then point component CSS at `var(--...)`
-instead of hardcoded hex, so a future rebrand or dark-mode pass is a one-file change and
-Stylelint can flag a stray hex value. This is a real refactor, not a doc change — don't
-do it as a side effect of an unrelated task; do it as its own reviewed change.
+Previous next-step ("extract the palette into CSS custom properties so a rebrand or
+theme pass is a one-file change") is **done** — that's exactly what this migration did.
+Next step now: a Stylelint (or `eslint-plugin-tailwindcss`) rule flagging a raw hex
+literal inside `src/components/**/*.{ts,tsx}`, so a regression back to hand-rolled colors
+fails `npm run lint` instead of waiting for review.
 
 ## Canonical examples
 
 - Variant-driven `basic/` component: [basic/button/button.tsx](../src/components/basic/button/button.tsx)
 - ColorScheme-driven `basic/` component: [basic/cards/financeCard.tsx](../src/components/basic/cards/financeCard.tsx)
-- Full palette + typography in context: [components/basic/button/button.css](../src/components/basic/button/button.css)
+- Responsive Dialog/Drawer composition: [components/modal/modal.tsx](../src/components/modal/modal.tsx)
+- Theme system end to end: [components/themeProvider/](../src/components/themeProvider/), [hooks/useTheme.ts](../src/hooks/useTheme.ts), [basic/themeToggle/themeToggle.tsx](../src/components/basic/themeToggle/themeToggle.tsx), token definitions in [../src/index.css](../src/index.css)

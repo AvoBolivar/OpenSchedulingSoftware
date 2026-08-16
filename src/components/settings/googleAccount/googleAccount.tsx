@@ -7,7 +7,6 @@ import { applyBackupData } from "../../../lib/importData"
 import { notify } from "../../../lib/notify"
 import Button from "../../basic/button/button"
 import Modal from "../../modal/modal"
-import "./googleAccount.css"
 
 export default function GoogleAccount() {
   const account = useAccountStore((s) => s.account)
@@ -62,37 +61,54 @@ export default function GoogleAccount() {
 
   if (!account) {
     return (
-      <div className="google-account">
-        <Button
-          label="Connect Google Drive"
-          variant="secondary"
-          onClick={handleConnect}
-          disabled={isBusy}
-        />
-      </div>
+      <Button
+        label="Connect Google Drive"
+        variant="secondary"
+        onClick={handleConnect}
+        disabled={isBusy}
+        className="w-full"
+      />
     )
   }
 
   return (
-    <div className="google-account">
-      <div className="google-account__profile">
+    <div className="flex w-full flex-col gap-3">
+      <div className="border-border bg-muted/50 flex items-center gap-3 rounded-lg border p-3">
         {account.pictureUrl && (
-          <img className="google-account__avatar" src={account.pictureUrl} alt="" aria-hidden="true" />
+          <img
+            className="size-10 shrink-0 rounded-full"
+            src={account.pictureUrl}
+            alt=""
+            aria-hidden="true"
+          />
         )}
         <div>
-          <div className="google-account__name">{account.name}</div>
-          <div className="google-account__email">{account.email}</div>
+          <div className="text-foreground font-semibold">{account.name}</div>
+          <div className="text-muted-foreground text-sm">{account.email}</div>
         </div>
       </div>
 
-      <Button label="Backup to Drive" variant="secondary" onClick={handleBackup} disabled={isBusy} />
+      <Button
+        label="Backup to Drive"
+        variant="secondary"
+        onClick={handleBackup}
+        disabled={isBusy}
+        className="w-full"
+      />
       <Button
         label="Restore from Drive"
         variant="secondary"
         onClick={() => setIsRestoreModalOpen(true)}
         disabled={isBusy}
+        className="w-full"
       />
-      <Button label="Disconnect" variant="danger" onClick={handleDisconnect} disabled={isBusy} />
+      <Button
+        label="Disconnect"
+        variant="danger"
+        onClick={handleDisconnect}
+        disabled={isBusy}
+        className="w-full"
+      />
 
       <Modal
         isOpen={isRestoreModalOpen}
@@ -103,9 +119,14 @@ export default function GoogleAccount() {
           This replaces all clients, appointments, and payments on this device with the
           backup stored in your Google Drive. This can't be undone.
         </p>
-        <div className="google-account__modal-actions">
-          <Button label="Cancel" variant="secondary" onClick={() => setIsRestoreModalOpen(false)} />
-          <Button label="Restore" variant="danger" onClick={handleRestore} />
+        <div className="mt-4 flex gap-3">
+          <Button
+            label="Cancel"
+            variant="secondary"
+            onClick={() => setIsRestoreModalOpen(false)}
+            className="flex-1"
+          />
+          <Button label="Restore" variant="danger" onClick={handleRestore} className="flex-1" />
         </div>
       </Modal>
     </div>

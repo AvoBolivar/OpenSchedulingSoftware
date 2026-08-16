@@ -1,6 +1,7 @@
 import { useState } from "react"
 import type { PageId } from "../components/basic/navbar/navbar"
 import NavBar from "../components/basic/navbar/navbar"
+import ThemeToggle from "../components/basic/themeToggle/themeToggle"
 import AppointmentsPage from "./appointmentsPage"
 import FinancePage from "./financePage"
 import ClientsPage from "./clientsPage"
@@ -10,31 +11,13 @@ export default function Home() {
   const [page, setPage] = useState<PageId>("appointments")
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#fdf2ea",
-        fontFamily: "Georgia, 'Times New Roman', serif",
-        color: "#450920",
-      }}
-    >
-      <header
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 10,
-          display: "flex",
-          justifyContent: "center",
-          padding: "18px 16px",
-          background: "rgba(253, 242, 234, 0.85)",
-          backdropFilter: "blur(6px)",
-          borderBottom: "1px solid rgba(255, 165, 171, 0.35)",
-        }}
-      >
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-border/60 bg-background/85 px-4 py-3 backdrop-blur-sm">
         <NavBar current={page} onChange={setPage} />
+        <ThemeToggle />
       </header>
 
-      <main style={{ padding: "4px 16px 40px" }}>
+      <main className="px-4 pt-1 pb-10">
         {page === "appointments" && <AppointmentsPage />}
         {page === "finance" && <FinancePage />}
         {page === "clients" && <ClientsPage />}

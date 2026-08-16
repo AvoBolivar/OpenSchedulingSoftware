@@ -1,7 +1,7 @@
 import type { Client } from "../../../definitions/client"
 import type { Appointment } from "../../../definitions/appointments"
 import { fromDateKey } from "../../../lib/date"
-import "./collectionCard.css"
+import { Card } from "../../ui/card"
 
 interface CollectionCardProps {
   client: Client
@@ -10,7 +10,6 @@ interface CollectionCardProps {
 }
 
 export default function CollectionCard({ client, appointment, onClick }: CollectionCardProps) {
-  // Format date nicely
   const dateObj = fromDateKey(appointment.date)
   const formattedDate = dateObj.toLocaleDateString("en-US", {
     month: "short",
@@ -18,15 +17,14 @@ export default function CollectionCard({ client, appointment, onClick }: Collect
     year: "numeric",
   })
 
-  // Format charge as currency
   const formattedCharge =
     typeof appointment.charge === "number"
       ? `$${appointment.charge.toFixed(2)}`
       : `$${appointment.charge}`
 
   return (
-    <div
-      className="collection-card"
+    <Card
+      className="flex-row items-center justify-between gap-3 p-3"
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -37,17 +35,17 @@ export default function CollectionCard({ client, appointment, onClick }: Collect
         }
       }}
     >
-      <div className="collection-main">
-        <h3 className="collection-name">{client.name}</h3>
-        <p className="collection-detail">{client.phoneNumber}</p>
-        <p className="collection-detail">{client.address}</p>
-        <p className="collection-date">Appointment {formattedDate}</p>
+      <div className="min-w-0 flex-1">
+        <h3 className="truncate text-sm font-medium">{client.name}</h3>
+        <p className="truncate text-xs text-muted-foreground">{client.phoneNumber}</p>
+        <p className="truncate text-xs text-muted-foreground">{client.address}</p>
+        <p className="mt-1 text-xs text-muted-foreground">Appointment {formattedDate}</p>
       </div>
 
-      <div className="collection-amount">
-        <span className="collection-amount-label">Owed</span>
-        <span className="collection-amount-value">{formattedCharge}</span>
+      <div className="flex shrink-0 flex-col items-end">
+        <span className="text-xs text-muted-foreground">Owed</span>
+        <span className="text-base font-semibold text-primary">{formattedCharge}</span>
       </div>
-    </div>
+    </Card>
   )
 }
