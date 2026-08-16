@@ -1,7 +1,7 @@
-import { Calendar, ChartLine, Settings, UserCog, Users } from "lucide-react"
+import { Briefcase, Calendar, ChartLine, Settings, UserCog, Users } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs"
 
-export type PageId = "appointments" | "finance" | "clients" | "employees" | "settings"
+export type PageId = "appointments" | "finance" | "clients" | "employees" | "jobs" | "settings"
 
 interface NavBarProps {
   current: PageId
@@ -13,6 +13,7 @@ const NAV_ITEMS: { id: PageId; label: string; icon: React.ReactNode }[] = [
   { id: "finance", label: "Finance", icon: <ChartLine aria-hidden="true" width={16} height={16} /> },
   { id: "clients", label: "Clients", icon: <Users aria-hidden="true" width={16} height={16} /> },
   { id: "employees", label: "Employees", icon: <UserCog aria-hidden="true" width={16} height={16} /> },
+  { id: "jobs", label: "Jobs", icon: <Briefcase aria-hidden="true" width={16} height={16} /> },
   { id: "settings", label: "Settings", icon: <Settings aria-hidden="true" width={16} height={16} /> },
 ]
 

@@ -201,5 +201,13 @@ Not yet enforced (caught only by re-reading this file):
   (`createEmployee.tsx` also introduces this repo's first inline-error pattern — a local
   `nameError` state rendered as a `text-destructive` span next to the field — since no
   prior create/update component had field-level validation to follow).
+- A second component *form* test pattern:
+  [`jobsList/createJob.test.tsx`](../src/components/jobsList/createJob.test.tsx) — this
+  form validates by disabling its submit button until required fields are filled (no
+  inline error message), so it pins that: `Done` stays disabled and the store action
+  never runs until a name and client are chosen, then a successful submit calls
+  `createJob` with the entered fields. A future form that validates via an inline error
+  message instead should still follow the same "assert the store action didn't run"
+  half of this pattern.
 
 Linking them is part of the task that creates them, not a cleanup for later.
