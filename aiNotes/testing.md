@@ -195,8 +195,11 @@ Not yet enforced (caught only by re-reading this file):
   `fetch` and the `window.google` GIS global, never the store or `Result` shape
   itself.
 
-Still none yet — first implementations become canonical and must be linked here when written:
-- first component *form* test, i.e. validation → inline error → successful submit calling the
-  store action (likely `createClient.test.tsx`)
+- First component *form* test, i.e. validation → inline error → successful submit calling the
+  store action:
+  [`employeesList/createEmployee.test.tsx`](../src/components/employeesList/createEmployee.test.tsx)
+  (`createEmployee.tsx` also introduces this repo's first inline-error pattern — a local
+  `nameError` state rendered as a `text-destructive` span next to the field — since no
+  prior create/update component had field-level validation to follow).
 
 Linking them is part of the task that creates them, not a cleanup for later.

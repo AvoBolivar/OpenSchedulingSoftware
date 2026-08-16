@@ -8,6 +8,8 @@ All three stores follow the same CRUD shape: `set*` (bulk replace), `create*` (a
 
 - **useClientStore.ts** — Manages `Client[]` (see [Client](../definitions/CLAUDE.md)). State: `clients`, `selectedClientID`. Persist key: `"clients"`. Simplest of the three stores — no derived/computed selectors, just CRUD plus a `selectedClientID` for UI selection state.
 
+- **useEmployeeStore.ts** — Manages `Employee[]` (see [Employee](../definitions/CLAUDE.md)). State: `employees`, `selectedEmployeeID`. Persist key: `"employees"`. Same shape as `useClientStore.ts` — plain CRUD, no derived selectors yet. `deleteEmployee` is currently unconditional; a `TODO(appointmentScopeGrowth Step 2.1)` marks where a referenced-by-appointment guard needs to go once appointments can reference employees.
+
 - **useAppointmentStore.ts** — Manages `Appointment[]`. State: `appointments`, `selectedAppointmentID`, `selectedDay` (a `Date`, used to drive the calendar view — not persisted, since `partialize` restricts persistence to `appointments` only). Persist key: `"appointments"`. Extra selectors beyond CRUD:
   - `getFutureAppointments()` — appointments from today onward, sorted by date.
   - `getMonthsAppointmentDates(year, month)` — deduped list of `Date`s with an appointment in a given month, used to mark the calendar.
