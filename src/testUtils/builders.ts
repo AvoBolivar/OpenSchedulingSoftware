@@ -48,6 +48,10 @@ export function buildAppointment(overrides: Partial<Appointment> = {}): Appointm
     endTime: '10:00 AM',
     expense: 25,
     show: true,
+    name: 'Test Appointment',
+    categoryIDs: [],
+    employeeIDs: [],
+    jobID: null,
     ...overrides,
   }
 }

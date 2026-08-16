@@ -21,7 +21,12 @@ interface AppointmentState {
   getFutureAppointments: () => Appointment[]
   getMonthsAppointmentDates: (year: number, month: number) => Date[]
   getDayAppointments: (date: string) => Appointment[]
+  getAppointmentsByJobID: (jobID: string) => Appointment[]
 }
+
+// Pre-v1 persisted shape: appointments saved before name/categoryIDs/employeeIDs/jobID existed.
+type LegacyAppointment = Omit<Appointment, 'name' | 'categoryIDs' | 'employeeIDs' | 'jobID'> &
+  Partial<Pick<Appointment, 'name' | 'categoryIDs' | 'employeeIDs' | 'jobID'>>
 
 export const useAppointmentStore = create<AppointmentState>()(
   persist(
@@ -91,11 +96,28 @@ export const useAppointmentStore = create<AppointmentState>()(
         return get()
           .appointments.filter((a) => a.date === date)
           .sort((a, b) => a.startTime.localeCompare(b.startTime))
+      },
+
+      getAppointmentsByJobID: (jobID: string) => {
+        return get().appointments.filter((a) => a.jobID === jobID)
       }
 
     }),
-    { 
+    {
       name: 'appointments',
+      version: 1,
+      migrate: (persistedState) => {
+        const state = persistedState as { appointments: LegacyAppointment[] }
+        return {
+          appointments: state.appointments.map((a) => ({
+            name: '',
+            categoryIDs: [],
+            employeeIDs: [],
+            jobID: null,
+            ...a,
+          })),
+        }
+      },
       partialize: (state) => ({ appointments: state.appointments }),
      }
   )

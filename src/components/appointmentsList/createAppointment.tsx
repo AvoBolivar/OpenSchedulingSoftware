@@ -64,6 +64,10 @@ export default function CreateAppointment() {
         date: toDateKey(date),
         expense: Number(expense),
         show: true,
+        name: '',
+        categoryIDs: [],
+        employeeIDs: [],
+        jobID: null,
       });
     }
 
