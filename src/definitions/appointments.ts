@@ -7,4 +7,8 @@ export interface Appointment {
   endTime: string
   expense: number
   show: boolean
+  name: string
+  categoryIDs: string[]
+  employeeIDs: string[]
+  jobID: string | null
 }

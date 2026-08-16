@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "../basic/button/button"
 import Modal from "../modal/modal";
 import { useEmployeeStore } from "../../stores/useEmployeeStore";
+import { notify } from "../../lib/notify";
 
 interface DeleteEmployeeProps {
   employeeID: string
@@ -11,6 +12,15 @@ export default function DeleteEmployee({employeeID}: DeleteEmployeeProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const deleteEmployee = useEmployeeStore((s) => s.deleteEmployee)
 
+  function handleDelete() {
+    const result = deleteEmployee(employeeID)
+    if (!result.ok) {
+      console.error(result.error.cause ?? result.error)
+      notify(result.error)
+      return
+    }
+    setIsModalOpen(false)
+  }
 
   return (
     <>
@@ -24,10 +34,7 @@ export default function DeleteEmployee({employeeID}: DeleteEmployeeProps) {
         <p>
           Are you sure you would like to delete this Employee?
         </p>
-        <Button label="yes" onClick={() => {
-          deleteEmployee(employeeID)
-          setIsModalOpen(false)
-        }}/>
+        <Button label="yes" onClick={handleDelete}/>
         <Button label="no" onClick={() => setIsModalOpen(false)} />
       </Modal>
     </>

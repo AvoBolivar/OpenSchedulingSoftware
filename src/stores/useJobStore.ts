@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Job } from '../definitions/job'
+import { useAppointmentStore } from './useAppointmentStore'
+import { type Result, ok, err } from '../lib/result'
 
 type NewJob = Omit<Job, 'id'>
 
@@ -14,7 +16,7 @@ interface JobState {
   createJob: (data: NewJob) => void
   getJob: (id: string) => Job | undefined
   updateJob: (id: string, patch: Partial<NewJob>) => void
-  deleteJob: (id: string) => void
+  deleteJob: (id: string) => Result<void>
 }
 
 export const useJobStore = create<JobState>()(
@@ -38,12 +40,23 @@ export const useJobStore = create<JobState>()(
           jobs: state.jobs.map((j) => (j.id === id ? { ...j, ...patch } : j)),
         })),
 
-      // TODO(appointmentScopeGrowth Step 2.1): block delete if any appointment.jobID references this job
-      deleteJob: (id) =>
+      deleteJob: (id) => {
+        const isReferenced = useAppointmentStore
+          .getState()
+          .appointments.some((a) => a.jobID === id)
+        if (isReferenced) {
+          return err({
+            kind: 'conflict',
+            message: 'This job is still linked to an appointment. Remove the link before deleting.',
+          })
+        }
+
         set((state) => ({
           jobs: state.jobs.filter((j) => j.id !== id),
           selectedJobID: state.selectedJobID === id ? null : state.selectedJobID,
-        })),
+        }))
+        return ok(undefined)
+      },
     }),
     { name: 'jobs' }
   )

@@ -1,6 +1,7 @@
 import { Clock, MapPin, Phone, ChevronRight, CheckCircle2 } from "lucide-react"
 import type { Appointment } from "../../../definitions/appointments"
 import { useClientStore } from "../../../stores/useClientStore"
+import { useCategoryStore } from "../../../stores/useCategoryStore"
 import { fromDateKey } from "../../../lib/date"
 import { Card } from "../../ui/card"
 import { cn } from "../../../lib/utils"
@@ -13,6 +14,7 @@ interface AppointmentCardProps {
 export default function AppointmentCard({ appointment, onClick }: AppointmentCardProps) {
   const getClient = useClientStore((s) => s.getClient)
   const client = getClient(appointment.clientID)
+  const categories = useCategoryStore((s) => s.categories)
 
   if (!client) {
     return (
@@ -45,6 +47,9 @@ export default function AppointmentCard({ appointment, onClick }: AppointmentCar
       : appointment.charge
 
   const isCompleted = !appointment.show
+  // Migrated pre-v1 appointments have an empty name — fall back to the client's name.
+  const primaryLabel = appointment.name || client.name
+  const appointmentCategories = categories.filter((c) => appointment.categoryIDs.includes(c.id))
 
   return (
     <Card
@@ -74,7 +79,7 @@ export default function AppointmentCard({ appointment, onClick }: AppointmentCar
             {initials}
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="truncate text-sm font-medium">{client.name}</h3>
+            <h3 className="truncate text-sm font-medium">{primaryLabel}</h3>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">{formattedCharge}</span>
               {isCompleted && (
@@ -86,6 +91,19 @@ export default function AppointmentCard({ appointment, onClick }: AppointmentCar
             </div>
           </div>
         </div>
+
+        {appointmentCategories.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1">
+            {appointmentCategories.map((category) => (
+              <span
+                key={category.id}
+                className="inline-flex items-center rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground"
+              >
+                {category.name}
+              </span>
+            ))}
+          </div>
+        )}
 
         <div className="flex flex-col gap-1 text-xs text-muted-foreground">
           <div className="flex items-center gap-1.5">

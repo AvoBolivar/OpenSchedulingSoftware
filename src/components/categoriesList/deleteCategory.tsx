@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "../basic/button/button"
 import Modal from "../modal/modal";
 import { useCategoryStore } from "../../stores/useCategoryStore";
+import { notify } from "../../lib/notify";
 
 interface DeleteCategoryProps {
   categoryID: string
@@ -11,8 +12,15 @@ export default function DeleteCategory({ categoryID }: DeleteCategoryProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const deleteCategory = useCategoryStore((s) => s.deleteCategory)
 
-  // TODO(step 2.1): add the conflict check once Appointment has categoryIDs —
-  // refuse deletion (kind: 'conflict') if any appointment still references this category.
+  function handleDelete() {
+    const result = deleteCategory(categoryID)
+    if (!result.ok) {
+      console.error(result.error.cause ?? result.error)
+      notify(result.error)
+      return
+    }
+    setIsModalOpen(false)
+  }
 
   return (
     <>
@@ -26,10 +34,7 @@ export default function DeleteCategory({ categoryID }: DeleteCategoryProps) {
         <p>
           Are you sure you would like to delete this Category?
         </p>
-        <Button label="yes" onClick={() => {
-          deleteCategory(categoryID)
-          setIsModalOpen(false)
-        }} />
+        <Button label="yes" onClick={handleDelete} />
         <Button label="no" onClick={() => setIsModalOpen(false)} />
       </Modal>
     </>
