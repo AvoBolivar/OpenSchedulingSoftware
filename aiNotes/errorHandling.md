@@ -201,11 +201,20 @@ lands, move those bullets up to "enforced" and shrink the prose to rationale.
 
 ## Canonical examples
 
-None exist yet — this file predates the code. The **first** implementations of each
-of these become the canonical examples and must be linked here when written:
-- first `lib/` boundary wrapper (likely `readStorage` / the import parser)
+- `Result`/`AppError`/`AppErrorKind`: [`lib/result.ts`](../src/lib/result.ts).
+- First `lib/` boundary wrappers (try/catch immediately around code we don't own):
+  [`lib/importData.ts`](../src/lib/importData.ts) (`JSON.parse`, `file.text()`) and
+  [`lib/backupProviders/googleDriveProvider.ts`](../src/lib/backupProviders/googleDriveProvider.ts)
+  (`fetch`, the Google Identity Services callback API — the first real server IO;
+  see its `"auth"` error kind for OAuth-specific failures).
+- `notify()`: [`lib/notify.ts`](../src/lib/notify.ts) +
+  [`stores/useNotificationStore.ts`](../src/stores/useNotificationStore.ts) +
+  [`basic/toast/toast.tsx`](../src/components/basic/toast/toast.tsx).
+
+Still none yet — first implementations become canonical and must be linked here when
+written:
 - first store action returning `conflict`
 - first form doing inline validation
-- `basic/errorFallback/` and `basic/toast/`
+- `basic/errorFallback/` (§4's render-crash boundary)
 
 Linking them is part of the task that creates them, not a cleanup for later.
