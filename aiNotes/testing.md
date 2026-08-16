@@ -195,8 +195,13 @@ Not yet enforced (caught only by re-reading this file):
   `fetch` and the `window.google` GIS global, never the store or `Result` shape
   itself.
 
-Still none yet — first implementations become canonical and must be linked here when written:
-- first component *form* test, i.e. validation → inline error → successful submit calling the
-  store action (likely `createClient.test.tsx`)
+First component *form* test:
+[`jobsList/createJob.test.tsx`](../src/components/jobsList/createJob.test.tsx) — this
+form validates by disabling its submit button until required fields are filled (no
+inline error message), so it pins that: `Done` stays disabled and the store action
+never runs until a name and client are chosen, then a successful submit calls
+`createJob` with the entered fields. A future form that validates via an inline error
+message instead should still follow the same "assert the store action didn't run"
+half of this pattern.
 
 Linking them is part of the task that creates them, not a cleanup for later.

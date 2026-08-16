@@ -1,6 +1,7 @@
 import type { Client } from '../definitions/client'
 import type { Appointment } from '../definitions/appointments'
 import type { Payment } from '../definitions/payments'
+import type { Job } from '../definitions/job'
 
 let counter = 0
 function nextId(prefix: string): string {
@@ -46,6 +47,18 @@ export function buildPayment(overrides: Partial<Payment> = {}): Payment {
     paymentReceived: false,
     expensesPaid: false,
     appointmentID: nextId('appointment'),
+    ...overrides,
+  }
+}
+
+export function buildJob(overrides: Partial<Job> = {}): Job {
+  return {
+    id: nextId('job'),
+    clientID: nextId('client'),
+    name: 'Test Job',
+    description: 'A test job',
+    status: 'active',
+    createdDate: '2026-01-01',
     ...overrides,
   }
 }

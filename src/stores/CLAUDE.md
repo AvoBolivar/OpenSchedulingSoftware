@@ -27,6 +27,8 @@ All three stores follow the same CRUD shape: `set*` (bulk replace), `create*` (a
   - `getTotalNetAfterPayouts()` — `getTotalCollected()` minus the sum of `expense` across payments where `expensesPaid` is true (independent of `paymentReceived`, matching `getTotalNeededToPayOut()`'s filter shape).
   - `payHelper(appointmentID)` — marks a payment's `expensesPaid` true by matching `appointmentID` (note: doesn't touch `paymentReceived`).
 
+- **useJobStore.ts** — Manages `Job[]` (see [Job](../definitions/CLAUDE.md)). State: `jobs`, `selectedJobID`. Persist key: `"jobs"`. Same CRUD shape as `useClientStore.ts`, no derived selectors yet. `deleteJob` is currently unconditional — see the `TODO(appointmentScopeGrowth Step 2.1)` comment in the file for the planned guard once `Appointment.jobID` exists.
+
 ## Gotchas
 
 - Cross-store reads use `useXStore.getState()` inside actions/selectors rather than the `useXStore()` hook, since these run outside React render (needed to avoid stale closures / extra re-renders). Components calling these derived selectors should still wrap them in `useMemo` keyed on the relevant store's state, as done in [financePage.tsx](../pages/CLAUDE.md) and [appointmentsPage.tsx](../pages/CLAUDE.md) — the selector functions themselves aren't reactive subscriptions.
