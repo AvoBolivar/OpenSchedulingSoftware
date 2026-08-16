@@ -1,7 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { useJobStore } from './useJobStore'
+import { useAppointmentStore } from './useAppointmentStore'
 import { resetStores } from '../testUtils/resetStores'
-import { buildJob } from '../testUtils/builders'
+import { buildJob, buildAppointment } from '../testUtils/builders'
+import { ok, err } from '../lib/result'
 
 describe('useJobStore', () => {
   beforeEach(() => resetStores())
@@ -29,10 +31,22 @@ describe('useJobStore', () => {
     const job = buildJob()
     useJobStore.setState({ jobs: [job], selectedJobID: job.id })
 
-    useJobStore.getState().deleteJob(job.id)
+    const result = useJobStore.getState().deleteJob(job.id)
 
+    expect(result).toEqual(ok(undefined))
     expect(useJobStore.getState().jobs).toHaveLength(0)
     expect(useJobStore.getState().selectedJobID).toBeNull()
+  })
+
+  it('returns conflict when deleting a job referenced by an appointment', () => {
+    const job = buildJob()
+    useJobStore.setState({ jobs: [job] })
+    useAppointmentStore.getState().createAppointment(buildAppointment({ jobID: job.id }))
+
+    const result = useJobStore.getState().deleteJob(job.id)
+
+    expect(result).toEqual(err({ kind: 'conflict', message: expect.any(String) }))
+    expect(useJobStore.getState().jobs).toHaveLength(1) // nothing was deleted
   })
 
   it('does not leak state between tests', () => {

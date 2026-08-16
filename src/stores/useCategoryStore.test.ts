@@ -1,7 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { useCategoryStore } from './useCategoryStore'
+import { useAppointmentStore } from './useAppointmentStore'
 import { resetStores } from '../testUtils/resetStores'
-import { buildCategory } from '../testUtils/builders'
+import { buildCategory, buildAppointment } from '../testUtils/builders'
+import { ok, err } from '../lib/result'
 
 describe('useCategoryStore', () => {
   beforeEach(() => resetStores())
@@ -28,9 +30,21 @@ describe('useCategoryStore', () => {
     const category = buildCategory()
     useCategoryStore.setState({ categories: [category] })
 
-    useCategoryStore.getState().deleteCategory(category.id)
+    const result = useCategoryStore.getState().deleteCategory(category.id)
 
+    expect(result).toEqual(ok(undefined))
     expect(useCategoryStore.getState().categories).toHaveLength(0)
+  })
+
+  it('returns conflict when deleting a category referenced by an appointment', () => {
+    const category = buildCategory()
+    useCategoryStore.setState({ categories: [category] })
+    useAppointmentStore.getState().createAppointment(buildAppointment({ categoryIDs: [category.id] }))
+
+    const result = useCategoryStore.getState().deleteCategory(category.id)
+
+    expect(result).toEqual(err({ kind: 'conflict', message: expect.any(String) }))
+    expect(useCategoryStore.getState().categories).toHaveLength(1) // nothing was deleted
   })
 
   it('does not leak state between tests', () => {
