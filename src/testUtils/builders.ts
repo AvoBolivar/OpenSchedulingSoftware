@@ -1,4 +1,5 @@
 import type { Client } from '../definitions/client'
+import type { Employee } from '../definitions/employee'
 import type { Appointment } from '../definitions/appointments'
 import type { Payment } from '../definitions/payments'
 
@@ -18,6 +19,17 @@ export function buildClient(overrides: Partial<Client> = {}): Client {
     employeePayment: 25,
     defaultStartTime: '9:00 AM',
     defaultEndTime: '10:00 AM',
+    notes: [],
+    active: true,
+    ...overrides,
+  }
+}
+
+export function buildEmployee(overrides: Partial<Employee> = {}): Employee {
+  return {
+    id: nextId('employee'),
+    name: 'Test Employee',
+    phoneNumber: '000-000-0000',
     notes: [],
     active: true,
     ...overrides,

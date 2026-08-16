@@ -13,6 +13,9 @@ Top-level route/page components, one per tab in the app's nav bar, plus the shar
 - **clientsPage.tsx** 
   - Functional Purpose: Renders the `ClientsList` and a `CreateClient` form.
   - Contextual Purpose: This page will show any client related information the user needs to see.
+- **employeesPage.tsx**
+  - Functional Purpose: Renders the `EmployeesList` and a `CreateEmployee` form.
+  - Contextual Purpose: Who works for the operator — separate from client data, mirrors `clientsPage.tsx`'s shape.
 - **financePage.tsx** 
   - Functional Purpose: Summary cards (this week/month totals, total owed, payout owed) sourced from `usePaymentStore`, plus a `CollectionsList` of people who owe money.
   - Contextual Purpose: Contains any financial information the user needs to see. 
